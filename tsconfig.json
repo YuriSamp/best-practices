@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ES2017",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "incremental": true
+  }
+}
