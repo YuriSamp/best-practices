@@ -16,26 +16,22 @@ const diffParser = (gitDiff) => {
   let isValidFile = false;
 
   const isValidFileExtension = (line) => {
-    let invalidFiles = 0;
-    IGNORED_FILES.forEach((ext) => {
-      invalidFiles += line.includes(ext);
-    });
-    return !invalidFiles;
+    return !IGNORED_FILES.some((ext) => line.includes(ext));
   };
 
-  const checkNewFile = (line) => {
-    const isANewFIle = line.slice(0, 5) === '+++ b';
+  const checkNewLine = (line) => {
+    const hasFileName = line.startsWith('+++');
 
-    if (isANewFIle && isValidFileExtension(line)) {
+    if (hasFileName && isValidFileExtension(line)) {
       isValidFile = true;
     }
-    if (isANewFIle && !isValidFileExtension(line)) {
+    if (hasFileName && !isValidFileExtension(line)) {
       isValidFile = false;
     }
   };
 
   gitDiff.split(/\r?\n/).forEach((line) => {
-    checkNewFile(line);
+    checkNewLine(line);
     if (line[0] === '+' && isValidFile) {
       diffString += line;
     }

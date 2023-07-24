@@ -39,9 +39,8 @@ async function handlePullRequestOpened({ octokit, payload }) {
         },
       }
     );
-    console.log(payload.pull_request.diff_url);
-    const gitDiff = fetch(payload.pull_request.diff_url);
-    console.log(gitDiff);
+    const gitDiff = await fetch(payload.pull_request.diff_url);
+    console.log(gitDiff.body);
   } catch (error) {
     if (error.response) {
       console.error(
