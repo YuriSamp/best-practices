@@ -3,7 +3,6 @@ import { App } from 'octokit';
 import fs from 'fs';
 import http from 'http';
 import { createNodeMiddleware } from '@octokit/webhooks';
-import { prChecker } from './openAi.js';
 
 dotenv.config();
 
@@ -15,10 +14,10 @@ const bestPratices = [
   'Refactoring book from Martin Fowler',
 ];
 
-const appId = process.env.APP_ID as string;
-const privateKeyPath = process.env.PRIVATE_KEY_PATH as string;
+const appId = process.env.APP_ID;
+const privateKeyPath = process.env.PRIVATE_KEY_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-const secret = process.env.WEBHOOK_SECRET as string;
+const secret = process.env.WEBHOOK_SECRET;
 
 const app = new App({
   appId,
@@ -28,7 +27,8 @@ const app = new App({
   },
 });
 
-const message = await prChecker('oi', bestPratices);
+const messageForNewPRs =
+  'Thanks for opening a new PR! Please follow our contributing guidelines to make your PR easier to review.';
 
 async function handlePullRequestOpened({ octokit, payload }) {
   console.log(
@@ -41,7 +41,7 @@ async function handlePullRequestOpened({ octokit, payload }) {
         owner: payload.repository.owner.login,
         repo: payload.repository.name,
         issue_number: payload.pull_request.number,
-        body: message,
+        body: messageForNewPRs,
         headers: {
           'x-github-api-version': '2022-11-28',
         },
