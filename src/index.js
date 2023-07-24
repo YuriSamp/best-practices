@@ -7,13 +7,13 @@ import { prChecker } from './openAi.js';
 
 dotenv.config();
 
-// const bestPratices = [
-//   'Clean Code',
-//   'SOLID',
-//   'Functional Programing Best Practices',
-//   'OOP Best Practices',
-//   'Refactoring book from Martin Fowler',
-// ];
+const bestPratices = [
+  'Clean Code',
+  'SOLID',
+  'Functional Programing Best Practices',
+  'OOP Best Practices',
+  'Refactoring book from Martin Fowler',
+];
 
 const appId = process.env.APP_ID;
 const privateKeyPath = process.env.PRIVATE_KEY_PATH;
