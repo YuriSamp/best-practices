@@ -6,14 +6,6 @@ import { createNodeMiddleware } from '@octokit/webhooks';
 
 dotenv.config();
 
-const bestPratices = [
-  'Clean Code',
-  'SOLID',
-  'Functional Programing Best Practices',
-  'OOP Best Practices',
-  'Refactoring book from Martin Fowler',
-];
-
 const appId = process.env.APP_ID;
 const privateKeyPath = process.env.PRIVATE_KEY_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
@@ -47,6 +39,9 @@ async function handlePullRequestOpened({ octokit, payload }) {
         },
       }
     );
+    console.log(payload.pull_request.diff_url);
+    const gitDiff = fetch(payload.pull_request.diff_url);
+    console.log((await gitDiff).json());
   } catch (error) {
     if (error.response) {
       console.error(
