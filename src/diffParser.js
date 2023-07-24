@@ -1,37 +1,45 @@
-const diffParser = () => {
-  let diffString;
-  let isReading = false;
+const IGNORED_FILES = [
+  '.yml',
+  '.yaml',
+  '.md',
+  '.json',
+  '.lock',
+  '.git',
+  '.example',
+  '.config.',
+  '.init.',
+  'LICENSE',
+];
 
-  const possibleFiles = [
-    '.yml',
-    '.yaml',
-    '.md',
-    '.json',
-    '.lock',
-    '.git',
-    '.cjs',
-    '.config.js',
-    'LICENSE',
-  ];
+const diffParser = (gitDiff) => {
+  let diffString = '';
+  let isValidFile = false;
 
-  const checkFile = (line) => {
+  const isValidFileExtension = (line) => {
     let invalidFiles = 0;
-    possibleFiles.forEach((ext) => {
+    IGNORED_FILES.forEach((ext) => {
       invalidFiles += line.includes(ext);
     });
-    return Boolean(invalidFiles);
+    return !invalidFiles;
   };
 
-  diff.split(/\r?\n/).forEach((line) => {
-    if (line.slice(0, 5) === '+++ b' && checkFile(line)) {
-      isReading = false;
-    } else if (line.slice(0, 5) === '+++ b' && !checkFile(line)) {
-      isReading = true;
-    }
+  const checkNewFile = (line) => {
+    const isANewFIle = line.slice(0, 5) === '+++ b';
 
-    if (line[0] === '+' && isReading) {
+    if (isANewFIle && isValidFileExtension(line)) {
+      isValidFile = true;
+    }
+    if (isANewFIle && !isValidFileExtension(line)) {
+      isValidFile = false;
+    }
+  };
+
+  gitDiff.split(/\r?\n/).forEach((line) => {
+    checkNewFile(line);
+    if (line[0] === '+' && isValidFile) {
       diffString += line;
     }
   });
+
   return diffString;
 };
