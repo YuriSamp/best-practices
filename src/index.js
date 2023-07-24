@@ -3,7 +3,6 @@ import { App } from 'octokit';
 import fs from 'fs';
 import http from 'http';
 import { createNodeMiddleware } from '@octokit/webhooks';
-import { prChecker } from './openAi.js';
 
 dotenv.config();
 
@@ -27,8 +26,6 @@ const app = new App({
     secret,
   },
 });
-
-// const message = await prChecker('oi', bestPratices);
 
 const messageForNewPRs =
   'Thanks for opening a new PR! Please follow our contributing guidelines to make your PR easier to review.';
