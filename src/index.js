@@ -9,6 +9,7 @@ import { gptAnalysisResult } from './getAIAnalysisForPRContent.js';
 dotenv.config();
 
 const appId = process.env.APP_ID;
+
 const privateKeyPath = process.env.PRIVATE_KEY_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const secret = process.env.WEBHOOK_SECRET;
@@ -27,6 +28,7 @@ async function handlePullRequestOpened({ octokit, payload }) {
     const codeChanges = await pullRequestChanges.text();
     const prChanges = cleanCodeChanges(codeChanges);
     const aiAnalysis = await gptAnalysisResult(prChanges);
+    console.log(aiAnalysis);
 
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
