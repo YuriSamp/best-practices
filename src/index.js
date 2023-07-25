@@ -25,8 +25,10 @@ async function handlePullRequestOpened({ octokit, payload }) {
   try {
     const request = await fetch(payload.pull_request.diff_url);
     const gitDiff = await request.text();
+    console.log(gitDiff);
     const newCode = diffParser(gitDiff);
-    const messageForNewPRs = prChecker(newCode);
+    console.log(newCode);
+    const messageForNewPRs = getAIAnalysisForPRContent(newCode);
 
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',

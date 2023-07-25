@@ -9,7 +9,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export const prChecker = async (prBody) => {
+export const getAIAnalysisForPRContent = async (prBody) => {
   try {
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo-16k',
