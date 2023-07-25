@@ -11,7 +11,7 @@ const IGNORED_FILES = [
   'LICENSE',
 ];
 
-const diffParser = (gitDiff) => {
+export const diffParser = (gitDiff) => {
   let diffString = '';
   let isValidFile = false;
 

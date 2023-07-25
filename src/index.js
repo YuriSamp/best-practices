@@ -3,13 +3,14 @@ import { App } from 'octokit';
 import fs from 'fs';
 import http from 'http';
 import { createNodeMiddleware } from '@octokit/webhooks';
+import { diffParser } from './diffParser.js';
+import { prChecker } from './openAi.js';
 
 dotenv.config();
 
 const appId = process.env.APP_ID;
 const privateKeyPath = process.env.PRIVATE_KEY_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-
 const secret = process.env.WEBHOOK_SECRET;
 
 const app = new App({
@@ -20,14 +21,13 @@ const app = new App({
   },
 });
 
-const messageForNewPRs =
-  'Thanks for opening a new PR! Please follow our contributing guidelines to make your PR easier to review.';
-
 async function handlePullRequestOpened({ octokit, payload }) {
-  console.log(
-    `Received a pull request event for #${payload.pull_request.number}`
-  );
   try {
+    const request = await fetch(payload.pull_request.diff_url);
+    const gitDiff = await request.text();
+    const newCode = diffParser(gitDiff);
+    const messageForNewPRs = prChecker(newCode);
+
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {
@@ -40,8 +40,6 @@ async function handlePullRequestOpened({ octokit, payload }) {
         },
       }
     );
-    const gitDiff = await fetch(payload.pull_request.diff_url);
-    console.log(gitDiff.body);
   } catch (error) {
     if (error.response) {
       console.error(
