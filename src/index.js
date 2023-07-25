@@ -9,6 +9,7 @@ dotenv.config();
 const appId = process.env.APP_ID;
 const privateKeyPath = process.env.PRIVATE_KEY_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+
 const secret = process.env.WEBHOOK_SECRET;
 
 const app = new App({
