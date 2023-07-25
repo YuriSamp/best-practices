@@ -9,16 +9,14 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export const prChecker = async (prBody, bestPratices) => {
+export const gptAnalysisResult = async (prBody) => {
   try {
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo-16k',
       messages: [
         {
           role: 'user',
-          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the best practices ${bestPratices.join(
-            ', '
-          )},
+          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the clean code, Functional Programing best practices or OOP best practices,
            you must generate a response using markdown containing two sections: Suggestions for Improvement and Breaking Principles. keep it short, use bullet point, here is the code: ${prBody}`,
         },
       ],

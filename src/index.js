@@ -3,8 +3,8 @@ import { App } from 'octokit';
 import fs from 'fs';
 import http from 'http';
 import { createNodeMiddleware } from '@octokit/webhooks';
-import { diffParser } from './diffParser.js';
-import { prChecker } from './openAi.js';
+import { cleanCodeChanges } from './cleanCodeChanges.js';
+import { gptAnalysisResult } from './getAIAnalysisForPRContent.js';
 
 dotenv.config();
 
@@ -23,10 +23,10 @@ const app = new App({
 
 async function handlePullRequestOpened({ octokit, payload }) {
   try {
-    const request = await fetch(payload.pull_request.diff_url);
-    const gitDiff = await request.text();
-    const newCode = diffParser(gitDiff);
-    const messageForNewPRs = prChecker(newCode);
+    const pullRequestChanges = await fetch(payload.pull_request.diff_url);
+    const codeChanges = await pullRequestChanges.text();
+    const prChanges = cleanCodeChanges(codeChanges);
+    const aiAnalysis = await gptAnalysisResult(prChanges);
 
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
@@ -34,7 +34,7 @@ async function handlePullRequestOpened({ octokit, payload }) {
         owner: payload.repository.owner.login,
         repo: payload.repository.name,
         issue_number: payload.pull_request.number,
-        body: messageForNewPRs,
+        body: aiAnalysis,
         headers: {
           'x-github-api-version': '2022-11-28',
         },
