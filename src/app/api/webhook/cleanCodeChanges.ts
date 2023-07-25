@@ -11,16 +11,16 @@ const IGNORED_FILES = [
   'LICENSE',
 ];
 
-export const cleanCodeChanges = (gitDiff) => {
+export const cleanCodeChanges = (gitDiff: string) => {
   let diffString = '';
 
   let isValidFile = false;
 
-  const isValidFileExtension = (line) => {
+  const isValidFileExtension = (line: string) => {
     return !IGNORED_FILES.some((ext) => line.includes(ext));
   };
 
-  const checkNewLine = (line) => {
+  const checkNewLine = (line: string) => {
     const hasFileName = line.startsWith('+++');
 
     if (hasFileName && isValidFileExtension(line)) {
