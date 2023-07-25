@@ -13,6 +13,7 @@ const IGNORED_FILES = [
 
 export const diffParser = (gitDiff) => {
   let diffString = '';
+
   let isValidFile = false;
 
   const isValidFileExtension = (line) => {
