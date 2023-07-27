@@ -24,7 +24,7 @@ type PullRequestOpened = {
 export async function POST(request: Request) {
   const appId = process.env.APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
-  const privateKey = fs.readFileSync('./key.pem', 'utf8');
+  const privateKey = process.env.PRIVATE_KEY as string;
 
   const app = new App({
     appId,
