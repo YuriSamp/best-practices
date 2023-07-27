@@ -5,6 +5,8 @@ import Image from 'next/image';
 
 export default function Home() {
 
+
+
   return (
     <main className="flex min-h-screen flex-col items-center bg-[#f5f3f1]">
       <header className='flex justify-between px-96 items-center my-5 w-full'>
