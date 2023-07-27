@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       const codeChanges = await pullRequestChanges.text();
       const prChanges = cleanCodeChanges(codeChanges);
       const aiAnalysis = await gptAnalysisResult(prChanges);
-      console.log(aiAnalysis);
+      console.log({ aiAnalysis });
 
       if (aiAnalysis) {
         await octokit.request(
