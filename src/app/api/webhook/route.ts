@@ -21,10 +21,10 @@ type PullRequestOpened = {
 };
 
 export async function POST(request: Request) {
+  console.log('Recebi um post');
   const appId = process.env.APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
   const privateKey = process.env.PRIVATE_KEY as string;
-
   const app = new App({
     appId,
     privateKey,
