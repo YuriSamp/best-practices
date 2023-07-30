@@ -32,12 +32,9 @@ export async function writePullRequestComment({
     }
     throw Error('Error on get event installation');
   } catch (error: any) {
-    if ('response' in error) {
-      console.error(
-        `Error! Status: ${error.response.status}. Message: ${error.response.data.message}`
-      );
-      return;
-    }
-    console.error(error);
+    return {
+      statusCode: error.response.status,
+      body: error.response.data.message,
+    };
   }
 }
