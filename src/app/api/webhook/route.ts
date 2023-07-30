@@ -1,27 +1,10 @@
-import { App, Octokit } from 'octokit';
-import { cleanCodeChanges } from './cleanCodeChanges';
-import { gptAnalysisResult } from './getAIAnalysisForPRContent';
-
-type Payload = {
-  pull_request: {
-    diff_url: string;
-    number: number;
-  };
-  repository: {
-    owner: {
-      login: string;
-    };
-    name: string;
-  };
-};
-
-type PullRequestOpened = {
-  octokit: Octokit;
-  payload: Payload;
-};
+import { App } from 'octokit';
+import { createHmac } from 'crypto';
+import { writePullRequestComment } from './WritePullRequest';
+import type { PullRequestEvent } from '@octokit/webhooks-types';
 
 export async function POST(request: Request) {
-  const appId = process.env.APP_ID as string;
+  const appId = process.env.GITHUB_APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
   const privateKey = process.env.PRIVATE_KEY as string;
   const app = new App({
@@ -32,51 +15,29 @@ export async function POST(request: Request) {
     },
   });
 
-  async function handlePullRequestOpened({
-    octokit,
-    payload,
-  }: PullRequestOpened) {
-    try {
-      const pullRequestChanges = await fetch(payload.pull_request.diff_url);
-      const codeChanges = await pullRequestChanges.text();
-      const prChanges = cleanCodeChanges(codeChanges);
-      const aiAnalysis = await gptAnalysisResult(prChanges);
-      console.log({ aiAnalysis });
+  const signRequestBody = (secret: string, body: string) =>
+    'sha256=' +
+    createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
 
-      if (aiAnalysis) {
-        await octokit.request(
-          'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-          {
-            owner: payload.repository.owner.login,
-            repo: payload.repository.name,
-            issue_number: payload.pull_request.number,
-            body: aiAnalysis,
-            headers: {
-              'x-github-api-version': '2022-11-28',
-            },
-          }
-        );
-        return;
-      }
-      throw Error('Fail on Get gpt analysis');
-    } catch (error: any) {
-      if ('response' in error) {
-        console.error(
-          `Error! Status: ${error.response.status}. Message: ${error.response.data.message}`
-        );
-        return;
-      }
-      console.error(error);
-    }
+  const theirSignature = request.headers.get('x-hub-signature-256');
+  const ourSignature = signRequestBody(secret, String(request.body));
+
+  if (theirSignature !== ourSignature) {
+    return {
+      statusCode: 401,
+      body: 'Bad signature',
+    };
   }
 
-  app.webhooks.on('pull_request.opened', handlePullRequestOpened);
-
-  app.webhooks.onError((error) => {
-    if (error.name === 'AggregateError') {
-      console.error(`Error processing request: ${error.event}`);
-    } else {
-      console.error(error);
-    }
-  });
+  const eventType = request.headers.get('x-github-event');
+  if (eventType !== 'pull_request') {
+    return { statusCode: 200 };
+  }
+  const event: PullRequestEvent = JSON.parse(String(request.body));
+  if (['reopened', 'opened'].includes(event.action)) {
+    await writePullRequestComment({ app, event });
+  }
+  return {
+    statusCode: 200,
+  };
 }
