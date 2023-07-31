@@ -15,20 +15,20 @@ export async function POST(request: Request) {
     },
   });
 
-  const signRequestBody = (secret: string, body: string) =>
-    'sha256=' +
-    createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
+  // const signRequestBody = (secret: string, body: string) =>
+  //   'sha256=' +
+  //   createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
 
-  const theirSignature = request.headers.get('x-hub-signature-256');
-  const ourSignature = signRequestBody(secret, String(request.body));
+  // const theirSignature = request.headers.get('x-hub-signature-256');
+  // const ourSignature = signRequestBody(secret, String(request.body));
 
-  if (theirSignature !== ourSignature) {
-    console.log({ messge: 'assinatura errada' });
-    return {
-      statusCode: 401,
-      body: 'Bad signature',
-    };
-  }
+  // if (theirSignature !== ourSignature) {
+  //   console.log({ messge: 'assinatura errada' });
+  //   return {
+  //     statusCode: 401,
+  //     body: 'Bad signature',
+  //   };
+  // }
 
   const eventType = request.headers.get('x-github-event');
   if (eventType !== 'pull_request') {
