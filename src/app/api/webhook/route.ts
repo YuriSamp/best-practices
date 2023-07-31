@@ -34,9 +34,10 @@ export async function POST(request: Request) {
   if (eventType !== 'pull_request') {
     return { statusCode: 200 };
   }
-  console.log({ request: request.body });
 
-  // const event = request.body;
+  if (request.body) console.log({ request: request.body.getReader() });
+
+  // const event = request.body?.getReader();
   // if (['reopened', 'opened'].includes(event.action)) {
   //   console.log({ messge: 'assinatura certa' });
   //   await writePullRequestComment({ app, event });
