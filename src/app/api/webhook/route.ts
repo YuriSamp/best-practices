@@ -35,12 +35,13 @@ export async function POST(request: Request) {
     return { statusCode: 200 };
   }
   console.log({ request: request.body });
-  const event: PullRequestEvent = JSON.parse(request.body);
-  if (['reopened', 'opened'].includes(event.action)) {
-    console.log({ messge: 'assinatura certa' });
-    await writePullRequestComment({ app, event });
-  }
-  return {
-    statusCode: 200,
-  };
+
+  // const event = request.body;
+  // if (['reopened', 'opened'].includes(event.action)) {
+  //   console.log({ messge: 'assinatura certa' });
+  //   await writePullRequestComment({ app, event });
+  // }
+  // return {
+  //   statusCode: 200,
+  // };
 }
