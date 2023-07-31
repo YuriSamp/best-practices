@@ -37,6 +37,7 @@ export async function POST(request: Request) {
   const event: PullRequestEvent = await request.json();
 
   if (['reopened', 'opened'].includes(event.action)) {
+    console.log('Um pr foi aberto');
     await writePullRequestComment({ app, event });
   }
   return {

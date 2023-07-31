@@ -13,10 +13,13 @@ export async function writePullRequestComment({
   try {
     if (event.installation) {
       const octokit = await app.getInstallationOctokit(event.installation.id);
+      console.log('conseguiu a instalação');
       const pullRequestChanges = await fetch(event.pull_request.diff_url);
+      console.log('fez o fetch na diff url');
       const codeChanges = await pullRequestChanges.text();
       const prChanges = cleanCodeChanges(codeChanges);
       const aiAnalysis = await gptAnalysisResult(prChanges);
+      console.log('Conseguiu o texto com o gepeto');
       if (aiAnalysis) {
         return octokit.request(
           'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
