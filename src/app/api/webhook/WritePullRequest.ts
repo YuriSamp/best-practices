@@ -14,11 +14,8 @@ export async function writePullRequestComment({
     if (event.installation) {
       const octokit = await app.getInstallationOctokit(event.installation.id);
       const pullRequestChanges = await fetch(event.pull_request.diff_url);
-      console.log('fez o fetch na diff url');
       const codeChanges = await pullRequestChanges.text();
-      console.log('Transformou o diff em texto');
       const prChanges = cleanCodeChanges(codeChanges);
-      console.log('Limpou o texto da diff');
       const aiAnalysis = await gptAnalysisResult(prChanges);
       console.log('Conseguiu o texto com o gepeto');
       if (aiAnalysis) {

@@ -9,7 +9,7 @@ const openai = new OpenAIApi(configuration);
 export const gptAnalysisResult = async (prBody: string) => {
   try {
     const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo-16k',
+      model: 'gpt-3.5-turbo-0301',
       messages: [
         {
           role: 'user',
@@ -21,6 +21,7 @@ export const gptAnalysisResult = async (prBody: string) => {
       max_tokens: 1000,
     });
 
+    console.log(response);
     if (response.data.choices[0].message) {
       return response.data.choices[0].message.content;
     }
