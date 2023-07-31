@@ -34,18 +34,12 @@ export async function POST(request: Request) {
   if (eventType !== 'pull_request') {
     return { statusCode: 200 };
   }
+  const event: PullRequestEvent = await request.json();
 
-  const content = await request.json();
-  console.log({ content });
-
-  // console.log({ request: request.body.getReader() });
-
-  // const event = request.body?.getReader();
-  // if (['reopened', 'opened'].includes(event.action)) {
-  //   console.log({ messge: 'assinatura certa' });
-  //   await writePullRequestComment({ app, event });
-  // }
-  // return {
-  //   statusCode: 200,
-  // };
+  if (['reopened', 'opened'].includes(event.action)) {
+    await writePullRequestComment({ app, event });
+  }
+  return {
+    statusCode: 200,
+  };
 }
