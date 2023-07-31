@@ -17,6 +17,7 @@ export async function writePullRequestComment({
       const codeChanges = await pullRequestChanges.text();
       const prChanges = cleanCodeChanges(codeChanges);
       const aiAnalysis = await gptAnalysisResult(prChanges);
+      console.log(aiAnalysis);
       if (aiAnalysis) {
         return octokit.request(
           'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
@@ -32,9 +33,6 @@ export async function writePullRequestComment({
     }
     throw Error('Error on get event installation');
   } catch (error: any) {
-    return {
-      statusCode: error.response.status,
-      body: error.response.data.message,
-    };
+    console.log(error);
   }
 }
