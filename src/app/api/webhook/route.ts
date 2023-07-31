@@ -15,6 +15,11 @@ export async function POST(request: Request) {
     },
   });
 
+  console.log(
+    { githubSignature: request.headers.get('x-hub-signature-256') },
+    { githubEvent: request.headers.get('x-github-event') }
+  );
+
   const signRequestBody = (secret: string, body: string) =>
     'sha256=' +
     createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
