@@ -1,21 +1,14 @@
-'use client'
-
 import Link from 'next/link';
 import { AiOutlineTool } from 'react-icons/ai'
 import PrExample from '../../public/example.png'
 import Image from 'next/image';
-import axios from 'axios'
-
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
 
-  const teste = async () => {
-    const response = await axios.post('/api/webhook')
-  }
-
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[#f5f3f1]">
-      <header className='flex justify-between px-96 items-center my-5 w-full'>
+    <main className="flex min-h-screen flex-col items-center bg-[#f5f3f1] px-96 ">
+      <header className='flex justify-between items-center my-5 w-full'>
         <div className='flex items-center gap-3'>
           <AiOutlineTool className='w-6 h-6' />
           <h3 className='text-xl'>Best-pratices</h3>
@@ -26,10 +19,7 @@ export default function Home() {
               <Link href={'#'}>Pricing</Link>
             </li>
             <li>
-              <Link href={'#'}>Log in</Link>
-            </li>
-            <li className='px-3 py-1 rounded-lg bg-black text-white'>
-              <Link href={'#'}>Sign Up</Link>
+              <Link className='p-3 rounded-lg bg-black text-white ' href={'#'}>Log in</Link>
             </li>
           </ul>
         </nav>
@@ -46,6 +36,11 @@ export default function Home() {
           <span>that tirelessly monitors, identifies, and delivers a myriad of enhancements.</span>
         </h3>
       </div>
+      <section>
+        <Button>
+          <Link href={'/auth'}>Get Started</Link>
+        </Button>
+      </section>
       <section className='my-20'>
         <div className='my-5 flex justify-between gap-10' >
           <Image src={PrExample} alt='Pull Request example' width={640} height={440} className='rounded-xl' />
@@ -59,12 +54,16 @@ export default function Home() {
           </ol>
         </div>
       </section>
-      <section className='my-20 text-center'>
-        <h2 className='text-3xl'>Somos open-source</h2>
-        <p className='my-2 text-lg'>Todo o código desse projeto se encontra hospedado no github</p>
-        <p className='text-lg'>Sinta-se livre para ler, revisar, copiar ou contribuir da maneira que quiser</p>
-      </section>
-      <footer className='mb-5 text-xl'>
+      <footer className='flex flex-col my-3 w-full '>
+        <div className='flex w-full my-5 py-5 border-b'>
+          <div className='flex flex-col gap-3'>
+            <div className='flex items-center gap-3'>
+              <AiOutlineTool className='w-6 h-6' />
+              <h3 className='text-xl'>Best-pratices</h3>
+            </div>
+            Provinding a cutting-edge tool to monitor every pull request you make
+          </div>
+        </div>
         &#169; 2023 Yuri | Codista
       </footer>
     </main>
