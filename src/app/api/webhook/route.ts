@@ -35,14 +35,11 @@ export async function POST(request: Request) {
     return { statusCode: 200 };
   }
 
-  if (request.body) {
-    const reader = request.body.getReader();
-    const { done, value } = await reader.read();
-    if (done) {
-      console.log(value);
-    }
-    // console.log({ request: request.body.getReader() });
-  }
+  const content = await request.json();
+  console.log({ content });
+
+  // console.log({ request: request.body.getReader() });
+
   // const event = request.body?.getReader();
   // if (['reopened', 'opened'].includes(event.action)) {
   //   console.log({ messge: 'assinatura certa' });
