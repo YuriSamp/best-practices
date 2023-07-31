@@ -15,11 +15,6 @@ export async function POST(request: Request) {
     },
   });
 
-  console.log(
-    { githubSignature: request.headers.get('x-hub-signature-256') },
-    { githubEvent: request.headers.get('x-github-event') }
-  );
-
   const signRequestBody = (secret: string, body: string) =>
     'sha256=' +
     createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
@@ -28,6 +23,7 @@ export async function POST(request: Request) {
   const ourSignature = signRequestBody(secret, String(request.body));
 
   if (theirSignature !== ourSignature) {
+    console.log({ messge: 'assinatura errada' });
     return {
       statusCode: 401,
       body: 'Bad signature',
@@ -40,6 +36,7 @@ export async function POST(request: Request) {
   }
   const event: PullRequestEvent = JSON.parse(String(request.body));
   if (['reopened', 'opened'].includes(event.action)) {
+    console.log({ messge: 'assinatura certa' });
     await writePullRequestComment({ app, event });
   }
   return {
