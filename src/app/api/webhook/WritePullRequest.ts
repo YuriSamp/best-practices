@@ -13,11 +13,12 @@ export async function writePullRequestComment({
   try {
     if (event.installation) {
       const octokit = await app.getInstallationOctokit(event.installation.id);
-      console.log('conseguiu a instalação');
       const pullRequestChanges = await fetch(event.pull_request.diff_url);
       console.log('fez o fetch na diff url');
       const codeChanges = await pullRequestChanges.text();
+      console.log('Transformou o diff em texto');
       const prChanges = cleanCodeChanges(codeChanges);
+      console.log('Limpou o texto da diff');
       const aiAnalysis = await gptAnalysisResult(prChanges);
       console.log('Conseguiu o texto com o gepeto');
       if (aiAnalysis) {
@@ -34,7 +35,7 @@ export async function writePullRequestComment({
       throw Error('Fail on Get gpt analysis');
     }
     throw Error('Error on get event installation');
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
     // return {
     //   statusCode: error.response.status,
