@@ -17,7 +17,6 @@ export async function writePullRequestComment({
       const codeChanges = await pullRequestChanges.text();
       const prChanges = cleanCodeChanges(codeChanges);
       const aiAnalysis = await gptAnalysisResult(prChanges);
-      console.log('Conseguiu o texto com o gepeto');
       if (aiAnalysis) {
         return octokit.request(
           'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
@@ -32,11 +31,10 @@ export async function writePullRequestComment({
       throw Error('Fail on Get gpt analysis');
     }
     throw Error('Error on get event installation');
-  } catch (error) {
-    console.log(error);
-    // return {
-    //   statusCode: error.response.status,
-    //   body: error.response.data.message,
-    // };
+  } catch (error: any) {
+    return {
+      statusCode: error.response.status,
+      body: error.response.data.message,
+    };
   }
 }

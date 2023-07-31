@@ -11,7 +11,6 @@ export default function Home() {
 
   const teste = async () => {
     const response = await axios.post('/api/webhook')
-    console.log(response.data)
   }
 
   return (
@@ -39,8 +38,6 @@ export default function Home() {
         <h1 className='flex flex-col items-center gap-1'>
           <span className='text-6xl'>Pull request with</span>
           <span className='text-5xl'>The best AI analysis</span>
-          <button className='bg-blue-900 rounded p-5' onClick={teste}>TESTE
-          </button>
         </h1>
       </div>
       <div>
