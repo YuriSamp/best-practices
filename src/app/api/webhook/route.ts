@@ -15,12 +15,14 @@ export async function POST(request: Request) {
     },
   });
 
-  // const signRequestBody = (secret: string, body: string) =>
-  //   'sha256=' +
-  //   createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
+  const signRequestBody = (secret: string, body: string) =>
+    'sha256=' +
+    createHmac('sha256', secret).update(body, 'utf-8').digest('hex');
 
-  // const theirSignature = request.headers.get('x-hub-signature-256');
-  // const ourSignature = signRequestBody(secret, String(request.body));
+  const theirSignature = request.headers.get('x-hub-signature-256');
+  const ourSignature = signRequestBody(secret, String(request.body));
+
+  console.log({ theirSignature, ourSignature });
 
   // if (theirSignature !== ourSignature) {
   //   console.log({ messge: 'assinatura errada' });

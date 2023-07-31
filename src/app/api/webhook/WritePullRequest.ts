@@ -1,6 +1,6 @@
 import { PullRequestEvent } from '@octokit/webhooks-types';
 import { cleanCodeChanges } from './cleanCodeChanges';
-import { gptAnalysisResult } from './getAIAnalysisForPRContent';
+import { gptAnalysisResult } from './gptAnalysis';
 import { App } from 'octokit';
 
 export async function writePullRequestComment({
