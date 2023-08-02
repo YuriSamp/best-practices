@@ -15,12 +15,11 @@ export async function writePullRequestComment({
       throw Error('Error on get event installation');
     }
     const octokit = await app.getInstallationOctokit(event.installation.id);
-
-    const { data } = await octokit.request(event.pull_request.diff_url);
-
-    console.log(data);
+    console.log({ url: event.pull_request.diff_url });
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
+    console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
+    console.log({ codeChanges });
     const prChanges = cleanCodeChanges(codeChanges);
     const aiAnalysis = await gptAnalysisResult(prChanges);
 
@@ -37,6 +36,9 @@ export async function writePullRequestComment({
         body: aiAnalysis,
       }
     );
+
+    const { data } = await octokit.request(event.pull_request.diff_url);
+    console.log(data);
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
