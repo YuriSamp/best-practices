@@ -17,20 +17,16 @@ export async function writePullRequestComment({
       const codeChanges = await pullRequestChanges.text();
       const prChanges = cleanCodeChanges(codeChanges);
       const aiAnalysis = await gptAnalysisResult(prChanges);
-      console.log({ aiAnalysis });
-      if (aiAnalysis) {
-        await octokit.request(
-          'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-          {
-            owner: event.repository.owner.login,
-            repo: event.repository.name,
-            issue_number: event.number,
-            body: aiAnalysis,
-          }
-        );
-        return;
-      }
-      throw Error('Fail on Get gpt analysis');
+      await octokit.request(
+        'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
+        {
+          owner: event.repository.owner.login,
+          repo: event.repository.name,
+          issue_number: event.number,
+          body: aiAnalysis as string,
+        }
+      );
+      return;
     }
     throw Error('Error on get event installation');
   } catch (error: any) {
