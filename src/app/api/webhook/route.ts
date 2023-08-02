@@ -36,10 +36,8 @@ export async function POST(request: Request) {
     owner: event.repository.owner.login,
     repo: event.repository.name,
     pull_number: event.number,
-    mediaType: {
-      format: 'diff',
-    },
   });
+
   console.log('diff data', JSON.stringify(data));
 
   return new Response(null, {
