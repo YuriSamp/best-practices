@@ -3,6 +3,14 @@ import { writePullRequestComment } from './WritePullRequest';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
 
 export async function POST(request: Request) {
+  const eventType = request.headers.get('x-github-event');
+
+  if (eventType !== 'pull_request') {
+    return new Response(null, {
+      status: 200,
+    });
+  }
+
   const appId = process.env.GITHUB_APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
   const privateKey = process.env.PRIVATE_KEY as string;
@@ -14,17 +22,13 @@ export async function POST(request: Request) {
     },
   });
 
-  const eventType = request.headers.get('x-github-event');
-  if (eventType !== 'pull_request') {
-    return { statusCode: 200 };
-  }
   const event: PullRequestEvent = await request.json();
 
-  console.log(event.action);
   if (['reopened', 'opened'].includes(event.action)) {
     await writePullRequestComment({ app, event });
   }
-  return {
-    statusCode: 200,
-  };
+
+  return new Response(null, {
+    status: 200,
+  });
 }
