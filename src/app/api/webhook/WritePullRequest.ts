@@ -24,12 +24,11 @@ export async function writePullRequestComment({
         format: 'diff',
       },
     });
-
-    console.log({ data });
+    console.log('diff data', JSON.stringify(data));
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
-    console.log({ pullRequestChanges });
+    // console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
-    console.log({ codeChanges });
+    // console.log({ codeChanges });
     const prChanges = cleanCodeChanges(codeChanges);
     const aiAnalysis = await gptAnalysisResult(prChanges);
 
