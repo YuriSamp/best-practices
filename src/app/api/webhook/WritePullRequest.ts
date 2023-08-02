@@ -20,6 +20,9 @@ export async function writePullRequestComment({
       owner: event.repository.owner.login,
       repo: event.repository.name,
       pull_number: event.number,
+      mediaType: {
+        format: 'diff',
+      },
     });
 
     console.log({ data });
