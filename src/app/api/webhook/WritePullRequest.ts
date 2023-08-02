@@ -25,7 +25,7 @@ export async function writePullRequestComment({
       throw Error('Fail on get Gpt analysis');
     }
 
-    await octokit.request(
+    const { status } = await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       {
         owner: event.repository.owner.login,
@@ -34,6 +34,7 @@ export async function writePullRequestComment({
         body: aiAnalysis,
       }
     );
+    console.log(status);
   } catch (error) {
     console.log(error);
   }
