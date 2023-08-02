@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     pull_number: event.number,
   });
 
-  console.log('diff data', JSON.stringify(data));
+  console.log({ data });
 
   return new Response(null, {
     status: 200,
