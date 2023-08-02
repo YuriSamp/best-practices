@@ -21,10 +21,11 @@ export const gptAnalysisResult = async (prBody: string) => {
       max_tokens: 1000,
     });
 
-    if (response.data.choices[0].message) {
-      return response.data.choices[0].message.content;
+    if (!response.data.choices[0].message) {
+      throw Error('Fail on Get gpt analysis');
     }
-    throw Error('Fail on Get gpt analysis');
+
+    return response.data.choices[0].message.content;
   } catch (error) {
     console.log(error);
   }
