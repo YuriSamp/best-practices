@@ -20,6 +20,7 @@ export async function POST(request: Request) {
   }
   const event: PullRequestEvent = await request.json();
 
+  console.log(event.action);
   if (['reopened', 'opened'].includes(event.action)) {
     await writePullRequestComment({ app, event });
   }
