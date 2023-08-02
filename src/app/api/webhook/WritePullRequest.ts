@@ -14,13 +14,13 @@ export async function writePullRequestComment({
     if (!event.installation) {
       throw Error('Error on get event installation');
     }
-
     const octokit = await app.getInstallationOctokit(event.installation.id);
-    console.log({ url: event.pull_request.diff_url });
+
+    const { data } = await octokit.request(event.pull_request.diff_url);
+
+    console.log(data);
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
-    console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
-    console.log({ codeChanges });
     const prChanges = cleanCodeChanges(codeChanges);
     const aiAnalysis = await gptAnalysisResult(prChanges);
 
