@@ -24,9 +24,23 @@ export async function POST(request: Request) {
 
   const event: PullRequestEvent = await request.json();
 
-  if (['reopened', 'opened'].includes(event.action)) {
-    await writePullRequestComment({ app, event });
+  if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
+    return new Response(null, {
+      status: 400,
+    });
   }
+
+  const octokit = await app.getInstallationOctokit(event.installation.id);
+
+  const { data } = await octokit.rest.pulls.get({
+    owner: event.repository.owner.login,
+    repo: event.repository.name,
+    pull_number: event.number,
+    mediaType: {
+      format: 'diff',
+    },
+  });
+  console.log('diff data', JSON.stringify(data));
 
   return new Response(null, {
     status: 200,
