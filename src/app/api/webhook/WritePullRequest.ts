@@ -16,6 +16,7 @@ export async function writePullRequestComment({
     }
 
     const octokit = await app.getInstallationOctokit(event.installation.id);
+    console.log({ url: event.pull_request.diff_url });
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
     console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
