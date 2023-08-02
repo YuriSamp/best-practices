@@ -37,8 +37,15 @@ export async function writePullRequestComment({
       }
     );
 
-    const { data } = await octokit.request(event.pull_request.diff_url);
-    console.log({ data });
+    const { data: diff } = await octokit.rest.pulls.get({
+      owner: event.repository.owner.login,
+      repo: event.repository.name,
+      pull_number: event.number,
+      mediaType: {
+        format: 'diff',
+      },
+    });
+    console.log({ diff });
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
