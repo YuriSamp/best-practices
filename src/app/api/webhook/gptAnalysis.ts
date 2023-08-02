@@ -14,7 +14,7 @@ export const gptAnalysisResult = async (prBody: string) => {
         {
           role: 'user',
           content: `You will act as a high-level code reviewer, you must analyze whether the code follows the clean code, Functional Programing best practices or OOP best practices,
-          you must generate a response using markdown containing three sections: Suggestions for Improvement, Breaking Principles and What code break the Principle, Add code examples. keep it short, use bullet point, here is the code: ${prBody}`,
+          you must generate a response using markdown containing three sections: Suggestions for Improvement, Breaking Principles and What code break the Principle, Add code examples in the language that code you received. keep it short, use bullet point, here is the code: ${prBody}`,
         },
       ],
       temperature: 0.1,
