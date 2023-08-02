@@ -28,6 +28,7 @@ export async function writePullRequestComment({
             body: aiAnalysis,
           }
         );
+        return;
       }
       throw Error('Fail on Get gpt analysis');
     }
