@@ -22,6 +22,7 @@ export async function POST(request: Request) {
 
   if (['reopened', 'opened'].includes(event.action)) {
     await writePullRequestComment({ app, event });
+    console.log('escrevi o pr');
   }
   return {
     statusCode: 200,
