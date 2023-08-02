@@ -15,7 +15,14 @@ export async function writePullRequestComment({
       throw Error('Error on get event installation');
     }
     const octokit = await app.getInstallationOctokit(event.installation.id);
-    console.log({ url: event.pull_request.diff_url });
+
+    const { data } = await octokit.rest.pulls.get({
+      owner: event.repository.owner.login,
+      repo: event.repository.name,
+      pull_number: event.number,
+    });
+
+    console.log({ data });
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
     console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
@@ -36,16 +43,6 @@ export async function writePullRequestComment({
         body: aiAnalysis,
       }
     );
-
-    const { data: diff } = await octokit.rest.pulls.get({
-      owner: event.repository.owner.login,
-      repo: event.repository.name,
-      pull_number: event.number,
-      mediaType: {
-        format: 'diff',
-      },
-    });
-    console.log({ diff });
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
