@@ -38,7 +38,7 @@ export async function writePullRequestComment({
     );
 
     const { data } = await octokit.request(event.pull_request.diff_url);
-    console.log(data);
+    console.log({ data });
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
