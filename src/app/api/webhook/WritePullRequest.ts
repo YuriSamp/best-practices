@@ -19,7 +19,7 @@ export async function writePullRequestComment({
       const aiAnalysis = await gptAnalysisResult(prChanges);
       console.log({ aiAnalysis });
       if (aiAnalysis) {
-        return octokit.request(
+        await octokit.request(
           'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
           {
             owner: event.repository.owner.login,
