@@ -16,7 +16,7 @@ export async function writePullRequestComment({
     }
     const octokit = await app.getInstallationOctokit(event.installation.id);
 
-    const { data: prDiff } = await octokit.rest.pulls.get({
+    const { data } = await octokit.rest.pulls.get({
       owner: event.repository.owner.login,
       repo: event.repository.name,
       pull_number: event.number,
@@ -25,7 +25,7 @@ export async function writePullRequestComment({
       },
     });
 
-    console.log({ prDiff });
+    console.log({ data });
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
     console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
