@@ -28,7 +28,6 @@ export async function writePullRequestComment({
     const pullRequestChanges = await fetch(event.pull_request.diff_url);
     // console.log({ pullRequestChanges });
     const codeChanges = await pullRequestChanges.text();
-    // console.log({ codeChanges });
     const prChanges = cleanCodeChanges(codeChanges);
     const aiAnalysis = await gptAnalysisResult(prChanges);
 
