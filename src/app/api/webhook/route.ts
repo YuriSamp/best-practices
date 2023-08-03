@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     },
   });
 
-  const response = data.text();
+  const response = await data.text();
 
   // const { data } = await octokit.rest.pulls.get({
   //   owner: event.repository.owner.login,
