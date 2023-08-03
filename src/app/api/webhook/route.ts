@@ -1,6 +1,7 @@
 import { App } from 'octokit';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
 import { gptAnalysisResult } from './gptAnalysis';
+import { cleanCodeChanges } from './cleanCodeChanges';
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
@@ -49,7 +50,8 @@ export async function POST(request: Request) {
   });
 
   const additions = files.data.map((file: any) => file.patch).join(',');
-  const aiAnalysis = await gptAnalysisResult(additions);
+  const prChanges = cleanCodeChanges(additions);
+  const aiAnalysis = await gptAnalysisResult(prChanges);
 
   try {
     if (!aiAnalysis) {
