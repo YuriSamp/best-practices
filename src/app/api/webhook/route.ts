@@ -1,6 +1,9 @@
 import { App } from 'octokit';
-import { writePullRequestComment } from './WritePullRequest';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
+import { context as github_context } from '@actions/github';
+
+const context = github_context;
+const repo = context.repo;
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
@@ -33,16 +36,33 @@ export async function POST(request: Request) {
 
   const octokit = await app.getInstallationOctokit(event.installation.id);
 
-  const { data } = await octokit.rest.pulls.get({
-    owner: event.repository.owner.login,
-    repo: event.repository.name,
-    pull_number: event.number,
-    mediaType: {
-      format: 'diff',
-    },
-  });
+  let highestReviewedCommitId = '';
 
-  console.log({ data });
+  const incrementalDiff = await octokit.request(
+    'GET /repos/{owner}/{repo}/compare/{base}...{head}',
+    {
+      owner: repo.owner,
+      repo: repo.repo,
+      base: highestReviewedCommitId,
+      head: context.payload.pull_request?.head.sha,
+    }
+  );
+
+  // Fetch the diff between the target branch's base commit and the latest commit of the PR branch
+  const targetBranchDiff = await octokit.request(
+    'GET /repos/{owner}/{repo}/compare/{base}...{head}',
+    {
+      owner: repo.owner,
+      repo: repo.repo,
+      base: context.payload.pull_request?.base.sha,
+      head: context.payload.pull_request?.head.sha,
+    }
+  );
+
+  const incrementalFiles = incrementalDiff.data.files;
+  const targetBranchFiles = targetBranchDiff.data.files;
+
+  console.log({ incrementalFiles, targetBranchFiles });
 
   return new Response(null, {
     status: 200,
