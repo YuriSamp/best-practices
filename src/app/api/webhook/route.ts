@@ -49,8 +49,9 @@ export async function POST(request: Request) {
   });
 
   const additions = files.data.map((file: any) => file.patch).join(',');
+  console.log({ additions });
   const prChanges = cleanCodeChanges(additions);
-  console.log({ prChanges });
+  // console.log({ prChanges });
   // const aiAnalysis = await gptAnalysisResult(prChanges);
 
   // try {
