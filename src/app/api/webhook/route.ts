@@ -33,24 +33,16 @@ export async function POST(request: Request) {
 
   const octokit = await app.getInstallationOctokit(event.installation.id);
 
-  const data = await fetch(event.pull_request.diff_url, {
-    headers: {
-      Accept: 'application/vnd.github.v3.diff',
+  const { data } = await octokit.rest.pulls.get({
+    owner: event.repository.owner.login,
+    repo: event.repository.name,
+    pull_number: event.number,
+    mediaType: {
+      format: 'diff',
     },
   });
 
-  const response = await data.text();
-
-  // const { data } = await octokit.rest.pulls.get({
-  //   owner: event.repository.owner.login,
-  //   repo: event.repository.name,
-  //   pull_number: event.number,
-  //   mediaType: {
-  //     format: 'diff',
-  //   },
-  // });
-
-  console.log({ response });
+  console.log({ data });
 
   return new Response(null, {
     status: 200,
