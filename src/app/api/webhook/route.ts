@@ -2,9 +2,6 @@ import { App } from 'octokit';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
 import { context as github_context } from '@actions/github';
 
-const context = github_context;
-const repo = context.repo;
-
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
 
@@ -36,33 +33,36 @@ export async function POST(request: Request) {
 
   const octokit = await app.getInstallationOctokit(event.installation.id);
 
-  let highestReviewedCommitId = '';
+  const { data } = await octokit.rest.pulls.get({
+    owner: event.repository.owner.login,
+    repo: event.repository.name,
+    pull_number: event.number,
+  });
 
-  const incrementalDiff = await octokit.request(
-    'GET /repos/{owner}/{repo}/compare/{base}...{head}',
-    {
-      owner: repo.owner,
-      repo: repo.repo,
-      base: highestReviewedCommitId,
-      head: context.payload.pull_request?.head.sha,
-    }
-  );
+  const changedFiles = data.changed_files;
+  console.log(`Número de arquivos alterados: ${changedFiles}`);
 
-  // Fetch the diff between the target branch's base commit and the latest commit of the PR branch
-  const targetBranchDiff = await octokit.request(
-    'GET /repos/{owner}/{repo}/compare/{base}...{head}',
-    {
-      owner: repo.owner,
-      repo: repo.repo,
-      base: context.payload.pull_request?.base.sha,
-      head: context.payload.pull_request?.head.sha,
-    }
-  );
+  const files = await octokit.rest.pulls.listFiles({
+    owner: event.repository.owner.login,
+    repo: event.repository.name,
+    pull_number: event.number,
+  });
 
-  const incrementalFiles = incrementalDiff.data.files;
-  const targetBranchFiles = targetBranchDiff.data.files;
+  files.data.forEach((file: any) => {
+    console.log(`Arquivo: ${file.filename}`);
+    console.log(`Nº de linhas Adicionadas: ${file.additions}`);
+    console.log(`Conteúdo adicionado: ${file.patch}`);
+    console.log(`Nº de linhas Removidas: ${file.deletions}`);
+  });
 
-  console.log({ incrementalFiles, targetBranchFiles });
+  // const diffUrl = data.diff_url;
+  // const diff = await octokit.request(`GET ${diffUrl}`);
+  // const addedLines = diff.data.split(/\r?\n/).filter((line) => line.startsWith("+"));
+
+  // console.log("Linhas adicionadas:");
+  // addedLines.forEach((line) => {
+  //   console.log(line);
+  // });
 
   return new Response(null, {
     status: 200,
