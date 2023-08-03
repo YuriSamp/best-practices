@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   const appId = process.env.GITHUB_APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
   const privateKey = process.env.PRIVATE_KEY as string;
+
   const app = new App({
     appId,
     privateKey,
@@ -32,13 +33,24 @@ export async function POST(request: Request) {
 
   const octokit = await app.getInstallationOctokit(event.installation.id);
 
-  const { data } = await octokit.rest.pulls.get({
-    owner: event.repository.owner.login,
-    repo: event.repository.name,
-    pull_number: event.number,
+  const data = await fetch(event.pull_request.diff_url, {
+    headers: {
+      Accept: 'application/vnd.github.v3.diff',
+    },
   });
 
-  console.log({ data });
+  const response = data.text();
+
+  // const { data } = await octokit.rest.pulls.get({
+  //   owner: event.repository.owner.login,
+  //   repo: event.repository.name,
+  //   pull_number: event.number,
+  //   mediaType: {
+  //     format: 'diff',
+  //   },
+  // });
+
+  console.log({ response });
 
   return new Response(null, {
     status: 200,
