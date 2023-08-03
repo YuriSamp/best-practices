@@ -1,6 +1,6 @@
 import { App } from 'octokit';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
-import { context as github_context } from '@actions/github';
+import { gptAnalysisResult } from './gptAnalysis';
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
@@ -48,21 +48,28 @@ export async function POST(request: Request) {
     pull_number: event.number,
   });
 
-  files.data.forEach((file: any) => {
-    console.log(`Arquivo: ${file.filename}`);
-    console.log(`Nº de linhas Adicionadas: ${file.additions}`);
-    console.log(`Conteúdo adicionado: ${file.patch}`);
-    console.log(`Nº de linhas Removidas: ${file.deletions}`);
-  });
+  const additions = files.data.map((file: any) => file.patch).join(',');
+  const aiAnalysis = await gptAnalysisResult(additions);
 
-  // const diffUrl = data.diff_url;
-  // const diff = await octokit.request(`GET ${diffUrl}`);
-  // const addedLines = diff.data.split(/\r?\n/).filter((line) => line.startsWith("+"));
+  try {
+    if (!aiAnalysis) {
+      throw Error('Fail on get Gpt analysis');
+    }
 
-  // console.log("Linhas adicionadas:");
-  // addedLines.forEach((line) => {
-  //   console.log(line);
-  // });
+    await octokit.request(
+      'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
+      {
+        owner: event.repository.owner.login,
+        repo: event.repository.name,
+        issue_number: event.number,
+        body: aiAnalysis,
+      }
+    );
+  } catch (error: any) {
+    return new Response(error.message, {
+      status: 500,
+    });
+  }
 
   return new Response(null, {
     status: 200,
