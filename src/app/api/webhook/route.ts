@@ -1,7 +1,19 @@
 import { App } from 'octokit';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
 import { gptAnalysisResult } from './gptAnalysis';
-import { cleanCodeChanges } from './cleanCodeChanges';
+
+const IGNORED_FILES = [
+  '.yml',
+  '.yaml',
+  '.md',
+  '.json',
+  '.lock',
+  '.git',
+  '.example',
+  '.config.',
+  '.init.',
+  'LICENSE',
+];
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
@@ -34,22 +46,23 @@ export async function POST(request: Request) {
 
   const octokit = await app.getInstallationOctokit(event.installation.id);
 
-  const { data } = await octokit.rest.pulls.get({
-    owner: event.repository.owner.login,
-    repo: event.repository.name,
-    pull_number: event.number,
-  });
-
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
     repo: event.repository.name,
     pull_number: event.number,
   });
 
+  const isValidFileExtension = (line: string) => {
+    return !IGNORED_FILES.some((ext) => line.includes(ext));
+  };
+
   let prChanges = '';
+
   files.data.forEach((file) => {
-    prChanges += file.filename;
-    prChanges += file.patch;
+    if (isValidFileExtension(file.filename)) {
+      prChanges += file.filename;
+      prChanges += file.patch;
+    }
   });
 
   const aiAnalysis = await gptAnalysisResult(prChanges);
