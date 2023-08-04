@@ -40,41 +40,39 @@ export async function POST(request: Request) {
     pull_number: event.number,
   });
 
-  const changedFiles = data.changed_files;
-
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
     repo: event.repository.name,
     pull_number: event.number,
   });
 
+  let prChanges = '';
   files.data.forEach((file) => {
-    console.log(`Arquivo: ${file.filename}`);
-    console.log(`Conteúdo adicionado: ${file.patch}`);
+    prChanges += file.filename;
+    prChanges += file.patch;
   });
 
-  // console.log({ prChanges });
-  // const aiAnalysis = await gptAnalysisResult(prChanges);
+  const aiAnalysis = await gptAnalysisResult(prChanges);
 
-  // try {
-  //   if (!aiAnalysis) {
-  //     throw Error('Fail on get Gpt analysis');
-  //   }
+  try {
+    if (!aiAnalysis) {
+      throw Error('Fail on get Gpt analysis');
+    }
 
-  //   await octokit.request(
-  //     'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-  //     {
-  //       owner: event.repository.owner.login,
-  //       repo: event.repository.name,
-  //       issue_number: event.number,
-  //       body: aiAnalysis,
-  //     }
-  //   );
-  // } catch (error: any) {
-  //   return new Response(error.message, {
-  //     status: 500,
-  //   });
-  // }
+    await octokit.request(
+      'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
+      {
+        owner: event.repository.owner.login,
+        repo: event.repository.name,
+        issue_number: event.number,
+        body: aiAnalysis,
+      }
+    );
+  } catch (error: any) {
+    return new Response(error.message, {
+      status: 500,
+    });
+  }
 
   return new Response(null, {
     status: 200,
