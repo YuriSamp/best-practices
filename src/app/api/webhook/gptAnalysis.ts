@@ -13,7 +13,7 @@ export const gptAnalysisResult = async (prBody: string) => {
       messages: [
         {
           role: 'user',
-          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the clean code, Functional Programing best practices or OOP best practices, you must generate a response using markdown containing three sections: Suggestions for Improvement, Breaking Principles and What code break the Principle, only if there are suggestion, improvement or coding that breaks this principles. Keep it short, use bullet point, write in markdown. here is the code ${prBody}`,
+          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the clean code, Functional Programing best practices or OOP best practices, you must generate a response using markdown containing three sections: Suggestions for Improvement, Breaking Principles and What code break the Principle, If there is no suggestion, write “All good 👍". Keep it short, use bullet point, write in markdown. here is the code ${prBody}`,
         },
       ],
       temperature: 0.1,
