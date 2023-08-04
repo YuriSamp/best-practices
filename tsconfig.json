@@ -29,7 +29,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/env.mjs"
+    "src/env.mjs",
+    "teste.tst"
   ],
   "exclude": ["node_modules"]
 }
