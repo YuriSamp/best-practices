@@ -48,8 +48,11 @@ export async function POST(request: Request) {
     pull_number: event.number,
   });
 
-  const additions = files.data.map((file: any) => file.diff).join(',');
-  console.log({ additions });
+  files.data.forEach((file) => {
+    console.log(`Arquivo: ${file.filename}`);
+    console.log(`Conteúdo adicionado: ${file.patch}`);
+  });
+
   // console.log({ prChanges });
   // const aiAnalysis = await gptAnalysisResult(prChanges);
 
