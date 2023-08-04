@@ -23,16 +23,18 @@ const Dashboard = () => {
 
   return (
     <main className='w-full min-h-screen flex justify-center items-center'>
-      <div className='flex flex-col justify-center items-center gap-3'>
-        <Button onClick={getSession}>
-          <Github /> Get Session
-        </Button>
-        <Button onClick={addOrganization}>
-          <Github /> Add a organization
-        </Button>
-        <Button onClick={addOrganization}>
-          <Github /> Add a repository
-        </Button>
+      <div className='flex justify-center gap-10 w-full'>
+        <div className='flex flex-col justify-center items-center gap-3'>
+          <Button onClick={getSession}>
+            <Github /> Get Session
+          </Button>
+          <Button onClick={addOrganization}>
+            <Github /> Add a organization
+          </Button>
+          <Button onClick={addOrganization}>
+            <Github /> Add a repository
+          </Button>
+        </div>
       </div>
     </main>
   )
