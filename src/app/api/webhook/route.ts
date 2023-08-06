@@ -51,8 +51,9 @@ export async function POST(request: Request) {
 
   const event: PullRequestEvent = await request.json()
 
-  console.log(event)
-  console.log(data[0].title)
+  console.log(
+    data.filter((repository) => repository.title === event.repository.name)
+  )
   console.log(data[0].rules)
 
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
