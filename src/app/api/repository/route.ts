@@ -5,9 +5,9 @@ export async function GET() {
   const appId = process.env.GITHUB_APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
   //DEV
-  // const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') as string;
+  const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') as string;
   //PROD
-  const privateKey = process.env.PRIVATE_KEY as string;
+  // const privateKey = process.env.PRIVATE_KEY as string;
 
   const app = new App({
     appId,
@@ -19,7 +19,7 @@ export async function GET() {
 
   try {
     const appUsers = await app.octokit.request('GET /app/installations');
-    const octokit = await app.getInstallationOctokit(appUsers.data[1].id);
+    const octokit = await app.getInstallationOctokit(appUsers.data[0].id);
     const repositories = await octokit.request(
       'GET /installation/repositories'
     );
