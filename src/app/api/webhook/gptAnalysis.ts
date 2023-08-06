@@ -14,7 +14,9 @@ export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
       messages: [
         {
           role: 'user',
-          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the ${stringRules}, you must generate a response using markdown containing four sections: Suggestions for Improvement, Breaking Principles and What code break the Principle and Which rules is using, If there is no suggestion, write “All good 👍". Keep it short, use bullet point, write in markdown. here is the code ${prBody}`,
+          content: `You will act as a high-level code reviewer, you must analyze whether the code follows the ${stringRules},
+           you must generate a response using markdown containing four sections: Suggestions for Improvement, Breaking Principles and What code break the Principle and Which rules is using,
+            If there is no suggestion, write “Everything's fine  👍". Keep it short, use bullet point, write in markdown. here is the code ${prBody}`,
         },
       ],
       temperature: 0.1,
