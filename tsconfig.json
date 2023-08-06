@@ -30,7 +30,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/env.mjs",
-    "teste.tst"
+    "teste.tst",
+    "src/app/api/repository/route.js"
   ],
   "exclude": ["node_modules"]
 }
