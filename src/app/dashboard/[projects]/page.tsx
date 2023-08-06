@@ -12,7 +12,7 @@ type Principals = {
   id: number
 }
 
-export default function Project({ params }: { params: { slug: string } }) {
+export default function Project({ params }: { params: { projects: string } }) {
   const [options, setOptions] = useState<Principals[]>([])
   const supabase = createClientComponentClient()
 
@@ -29,7 +29,7 @@ export default function Project({ params }: { params: { slug: string } }) {
     const session = await supabase.auth.getSession();
     const user = session.data.session?.user.user_metadata.user_name;
     const dbobj = {
-      title: params.slug,
+      title: params.projects,
       rules: pratices,
       user,
     }
@@ -37,7 +37,6 @@ export default function Project({ params }: { params: { slug: string } }) {
       .from('repositories')
       .insert(dbobj)
       .select()
-    console.log(data, error)
   }
 
   return (
