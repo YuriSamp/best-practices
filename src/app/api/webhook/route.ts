@@ -51,11 +51,6 @@ export async function POST(request: Request) {
 
   const event: PullRequestEvent = await request.json()
 
-  console.log(
-    data.filter((repository) => repository.title === event.repository.name)
-  )
-  console.log(data[0].rules)
-
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
     return new Response(null, {
       status: 400,
@@ -83,7 +78,10 @@ export async function POST(request: Request) {
     }
   })
 
-  const aiAnalysis = await gptAnalysisResult(prChanges)
+  const repoRules = data.filter(
+    (repository) => repository.title === event.repository.name
+  )[0].rules
+  const aiAnalysis = await gptAnalysisResult(prChanges, repoRules)
 
   try {
     if (!aiAnalysis) {
