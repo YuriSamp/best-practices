@@ -4,6 +4,7 @@ import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import principals from '../../../principals.json'
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 
 type Principals = {
@@ -12,8 +13,8 @@ type Principals = {
 }
 
 export default function Project({ params }: { params: { slug: string } }) {
-
   const [options, setOptions] = useState<Principals[]>([])
+  const supabase = createClientComponentClient()
 
   const handleCheck = (pratices: string, id: number) => {
     if (options.filter(item => item.pratices === pratices).length > 0) {
@@ -25,9 +26,19 @@ export default function Project({ params }: { params: { slug: string } }) {
 
   const saveOptions = async () => {
     const pratices = options.map(item => item.pratices)
+    const session = await supabase.auth.getSession();
+    const user = session.data.session?.user.user_metadata.user_name;
+    const dbobj = {
+      title: params.slug,
+      rules: pratices,
+      user,
+    }
+    const { data, error } = await supabase
+      .from('repositories')
+      .insert(dbobj)
+      .select()
+    console.log(data, error)
   }
-
-  console.log(options)
 
   return (
     <main className='flex overflow-y-auto  min-h-screen'>
@@ -50,7 +61,7 @@ export default function Project({ params }: { params: { slug: string } }) {
         </ul>
         <div className='w-full flex border-t border-r justify-between border-black'>
           <span className='w-1/2 flex justify-center border-r border-black py-3 bg-slate-500'>clear</span>
-          <span className='w-1/2 flex justify-center py-3 bg-green-300'>save</span>
+          <span className='w-1/2 flex justify-center py-3 bg-green-300 hover:cursor-pointer' onClick={saveOptions}>save</span>
         </div>
       </aside>
       <div className='flex flex-col items-center w-full'>

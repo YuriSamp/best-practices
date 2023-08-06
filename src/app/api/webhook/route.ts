@@ -1,6 +1,9 @@
 import { App } from 'octokit';
 import type { PullRequestEvent } from '@octokit/webhooks-types';
 import { gptAnalysisResult } from './gptAnalysis';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
+import { getSupabaseClient } from '@/db/getSupabaseClient';
 
 const IGNORED_FILES = [
   '.yml',
@@ -17,6 +20,18 @@ const IGNORED_FILES = [
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event');
+
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from('repositories').select();
+
+  if (error) {
+    console.log(error);
+    return new Response(null, {
+      status: 500,
+    });
+  }
+
+  console.log(data);
 
   if (eventType !== 'pull_request') {
     return new Response(null, {

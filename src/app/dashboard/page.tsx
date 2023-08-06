@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation'
 import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import axios from 'axios'
+import Link from 'next/link'
 
 const Dashboard = () => {
 
   const [projects, setProjects] = useState([])
-
   const router = useRouter()
 
   const addOrganization = () => {
@@ -20,7 +20,6 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const repositories = await axios.get('../api/repository')
-      console.log(repositories.data.repositories.data.repositories)
       setProjects(repositories.data.repositories.data.repositories)
     }
     fetchData()
@@ -52,10 +51,10 @@ const Dashboard = () => {
             </li>
             {projects.map(project =>
             (<li className='border w-80 h-40 p-4 rounded-xl bg-neutral-700 cursor-pointer' key={project.id}>
-              <div className='flex justify-between'>
+              <Link href={`./dashboard/${project.name}`} className='flex justify-between w-full h-full'>
                 <Folder />
                 <p className='text-2xl text-white'>{project.name}</p>
-              </div>
+              </Link>
             </li>)
             )}
           </ul>

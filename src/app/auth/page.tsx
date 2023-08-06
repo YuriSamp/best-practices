@@ -17,7 +17,7 @@ const Auth = () => {
       provider: 'github',
     })
 
-    console.log({ data, error })
+
   }
 
   async function getSession() {
