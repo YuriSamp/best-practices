@@ -7,9 +7,9 @@ export async function GET() {
   const appId = process.env.GITHUB_APP_ID
   const secret = process.env.WEBHOOK_SECRET
   // DEV
-  // const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') as string
+  const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n')
   //PROD
-  const privateKey = process.env.PRIVATE_KEY
+  // const privateKey = process.env.PRIVATE_KEY
 
   const app = new App({
     appId,

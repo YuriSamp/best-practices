@@ -8,9 +8,14 @@ import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import axios from 'axios'
 import Link from 'next/link'
 
+type Projects = {
+  name: string
+  id: number
+}
+
 const Dashboard = () => {
 
-  const [projects, setProjects] = useState([])
+  const [projects, setProjects] = useState<Projects[]>([])
   const router = useRouter()
 
   const addOrganization = () => {
@@ -24,6 +29,8 @@ const Dashboard = () => {
     }
     fetchData()
   }, [])
+
+  console.log(projects[0])
 
 
   return (
