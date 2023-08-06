@@ -4,10 +4,10 @@ import { App } from 'octokit';
 export async function GET() {
   const appId = process.env.GITHUB_APP_ID as string;
   const secret = process.env.WEBHOOK_SECRET as string;
-  //DEV
-  const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') as string;
+  // DEV
+  // const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') as string;
   //PROD
-  // const privateKey = process.env.PRIVATE_KEY as string;
+  const privateKey = process.env.PRIVATE_KEY as string;
 
   const app = new App({
     appId,
