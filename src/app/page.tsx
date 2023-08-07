@@ -16,7 +16,7 @@ export default function Home() {
         <nav>
           <ul className='flex items-center gap-5'>
             <li>
-              <Link href={'#'}>Pricing</Link>
+              <Link href={'/prices'}>Prices</Link>
             </li>
             <li>
               <Link className='p-3 rounded-lg bg-black text-white ' href={'#'}>Log in</Link>
@@ -36,12 +36,12 @@ export default function Home() {
           <span>that tirelessly monitors, identifies, and delivers a myriad of enhancements.</span>
         </h3>
       </div>
-      <section>
+      <section className='my-10'>
         <Button>
           <Link href={'/auth'}>Get Started</Link>
         </Button>
       </section>
-      <section className='my-20'>
+      <section className='my-10'>
         <div className='my-5 flex justify-between gap-10' >
           <Image src={PrExample} alt='Pull Request example' width={640} height={440} className='rounded-xl' />
           <ol className='flex flex-col gap-20 w-80'>
