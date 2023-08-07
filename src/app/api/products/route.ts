@@ -1,12 +1,7 @@
-import Stripe from 'stripe'
 import { NextResponse } from 'next/server'
+import { stripe } from '@/lib/stripe'
 
 export async function GET() {
-  const stripeKey = process.env.STRIPE_WEBHOOK_SECRET as string
-  const stripe = new Stripe(stripeKey, {
-    apiVersion: '2022-11-15',
-  })
-
   const prices = await stripe.prices.list({
     limit: 3,
   })

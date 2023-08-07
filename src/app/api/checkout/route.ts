@@ -1,12 +1,7 @@
-import Stripe from 'stripe'
 import { NextRequest, NextResponse } from 'next/server'
+import { stripe } from '@/lib/stripe'
 
 export async function POST(request: NextRequest) {
-  const stripeKey = process.env.STRIPE_WEBHOOK_SECRET as string
-  const stripe = new Stripe(stripeKey, {
-    apiVersion: '2022-11-15',
-  })
-
   try {
     let data = await request.json()
     let priceId = data.id
