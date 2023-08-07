@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: 'http://localhost:3000/dashboard',
-      cancel_url: 'http://localhost:3000',
+      success_url: 'https://prcheker.vercel.app/dashboard',
+      cancel_url: 'https://prcheker.vercel.app/prices',
     })
     return NextResponse.json(session.url)
   } catch (error) {
