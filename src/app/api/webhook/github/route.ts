@@ -18,12 +18,10 @@ const IGNORED_FILES = [
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
-
   const supabase = getSupabaseClient()
   const { data, error } = await supabase.from('Projects').select()
 
   if (error) {
-    console.log(error)
     return new Response(null, {
       status: 500,
     })
@@ -32,6 +30,25 @@ export async function POST(request: Request) {
   if (eventType !== 'pull_request') {
     return new Response(null, {
       status: 200,
+    })
+  }
+
+  const event: PullRequestEvent = await request.json()
+  const appId = process.env.GITHUB_APP_ID as string
+  const secret = process.env.WEBHOOK_SECRET as string
+  const privateKey = process.env.PRIVATE_KEY as string
+
+  const app = new App({
+    appId,
+    privateKey,
+    webhooks: {
+      secret,
+    },
+  })
+
+  if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
+    return new Response(null, {
+      status: 400,
     })
   }
 
@@ -50,26 +67,6 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.log(error)
-  }
-
-  const appId = process.env.GITHUB_APP_ID as string
-  const secret = process.env.WEBHOOK_SECRET as string
-  const privateKey = process.env.PRIVATE_KEY as string
-
-  const app = new App({
-    appId,
-    privateKey,
-    webhooks: {
-      secret,
-    },
-  })
-
-  const event: PullRequestEvent = await request.json()
-
-  if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
-    return new Response(null, {
-      status: 400,
-    })
   }
 
   const octokit = await app.getInstallationOctokit(event.installation.id)
