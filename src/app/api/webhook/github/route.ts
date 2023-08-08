@@ -35,6 +35,18 @@ export async function POST(request: Request) {
     })
   }
 
+  const repo = data.filter(
+    (repository) => repository.title === event.repository.name
+  )[0]
+
+  const { count } = await supabase.from('Comments').select()
+  console.log(count)
+  if (count === 5) {
+    return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
+      status: 500,
+    })
+  }
+
   const appId = process.env.GITHUB_APP_ID as string
   const secret = process.env.WEBHOOK_SECRET as string
   const privateKey = process.env.PRIVATE_KEY as string
@@ -76,10 +88,6 @@ export async function POST(request: Request) {
     }
   })
 
-  console.log({ data })
-  const repo = data.filter(
-    (repository) => repository.title === event.repository.name
-  )[0]
   const aiAnalysis = await gptAnalysisResult(prChanges, repo.rules)
 
   try {
