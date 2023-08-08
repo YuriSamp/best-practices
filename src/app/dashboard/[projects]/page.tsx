@@ -27,16 +27,23 @@ export default function Project({ params }: { params: { projects: string } }) {
   const saveOptions = async () => {
     const pratices = options.map(item => item.pratices)
     const session = await supabase.auth.getSession();
-    const user = session.data.session?.user.user_metadata.user_name;
+    const user = session.data.session?.user.id;
     const dbobj = {
       title: params.projects,
       rules: pratices,
       user,
     }
     const { data, error } = await supabase
-      .from('repositories')
+      .from('Projects')
       .insert(dbobj)
       .select()
+
+    if (!error) {
+      console.log({ data })
+      // caso tudo de certo
+      return
+    }
+    console.log(error)
   }
 
   return (

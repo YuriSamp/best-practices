@@ -1,8 +1,6 @@
 import { App } from 'octokit'
 import type { PullRequestEvent } from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import { getSupabaseClient } from '@/db/getSupabaseClient'
 
 const IGNORED_FILES = [
@@ -22,7 +20,7 @@ export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
 
   const supabase = getSupabaseClient()
-  const { data, error } = await supabase.from('repositories').select()
+  const { data, error } = await supabase.from('Projects').select()
 
   if (error) {
     console.log(error)
@@ -78,10 +76,11 @@ export async function POST(request: Request) {
     }
   })
 
-  const repoRules = data.filter(
+  console.log({ data })
+  const repo = data.filter(
     (repository) => repository.title === event.repository.name
-  )[0].rules
-  const aiAnalysis = await gptAnalysisResult(prChanges, repoRules)
+  )[0]
+  const aiAnalysis = await gptAnalysisResult(prChanges, repo.rules)
 
   try {
     if (!aiAnalysis) {
@@ -97,6 +96,11 @@ export async function POST(request: Request) {
         body: aiAnalysis,
       }
     )
+
+    await supabase.from('Comments').insert({
+      project_id: repo.id,
+      token_count: 0,
+    })
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,

@@ -17,10 +17,10 @@ export async function GET() {
   })
 
   const supabase = createRouteHandlerClient({ cookies })
-  const session = await supabase.auth.getSession()
-  const supabaseUserName = session.data.session?.user.user_metadata.user_name
 
   try {
+    const session = await supabase.auth.getSession()
+    const supabaseUserName = session.data.session?.user.user_metadata.user_name
     const appUsers = await app.octokit.request('GET /app/installations')
     const user = appUsers.data.filter(
       (user) => user.account?.login === supabaseUserName
