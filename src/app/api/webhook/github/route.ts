@@ -57,10 +57,11 @@ export async function POST(request: Request) {
   )[0]
 
   try {
-    const { count } = await supabase.from('Comments').select()
-
-    console.log(count)
-    if (count === 5) {
+    const { data } = await supabase.from('Comments').select()
+    const coments = data?.filter(
+      (coments) => coments.project_id === repo.id
+    ).length
+    if (coments && coments >= 5) {
       return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
         status: 500,
       })
