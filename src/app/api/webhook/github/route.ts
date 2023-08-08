@@ -39,12 +39,17 @@ export async function POST(request: Request) {
     (repository) => repository.title === event.repository.name
   )[0]
 
-  const { count } = await supabase.from('Comments').select()
-  console.log(count)
-  if (count === 5) {
-    return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
-      status: 500,
-    })
+  try {
+    const { count } = await supabase.from('Comments').select()
+
+    console.log(count)
+    if (count === 5) {
+      return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
+        status: 500,
+      })
+    }
+  } catch (error) {
+    console.log(error)
   }
 
   const appId = process.env.GITHUB_APP_ID as string
