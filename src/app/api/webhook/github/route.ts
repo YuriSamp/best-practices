@@ -61,6 +61,7 @@ export async function POST(request: Request) {
     const coments = data?.filter(
       (coments) => coments.project_id === repo.id
     ).length
+    console.log(coments)
     if (coments && coments >= 5) {
       return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
         status: 500,
