@@ -14,7 +14,6 @@ type Principals = {
 
 export default function Project({ params }: { params: { projects: string } }) {
   const [options, setOptions] = useState<Principals[]>([])
-  const supabase = createClientComponentClient()
 
   const handleCheck = (pratices: string, id: number) => {
     if (options.filter(item => item.pratices === pratices).length > 0) {
@@ -24,6 +23,7 @@ export default function Project({ params }: { params: { projects: string } }) {
     }
   }
 
+  const supabase = createClientComponentClient()
   const saveOptions = async () => {
     const pratices = options.map(item => item.pratices)
     const session = await supabase.auth.getSession();
