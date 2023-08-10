@@ -1,16 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import RulesBox from '@/components/rulesBox'
 import Sidebar from '@/components/sidebar'
 import Navbar from '@/components/navbar'
-
-type Principals = {
-  pratices: string
-  id: number
-}
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios'
 
 type Projects = {
   name: string
@@ -36,6 +32,10 @@ const Dashboard = () => {
       <div className='flex flex-col w-full gap-10'>
         <Navbar />
         <section className='flex justify-center items-center h-full'>
+          <ToastContainer
+            position='top-center'
+            theme='dark'
+          />
           {!!repoSelect.length ?
             <RulesBox
               repository={repoSelect}

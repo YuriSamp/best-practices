@@ -3,6 +3,7 @@ import principals from '../principals.json'
 import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { toast } from 'react-toastify';
 
 type Principals = {
   pratices: string
@@ -41,12 +42,11 @@ const RulesBox = ({ repository }: { repository: string }) => {
 
     if (!error) {
       console.log({ data })
-      // caso tudo de certo
+      toast.success("Suas preferencias foram salvas com sucesso")
       return
     }
-    console.log(error)
+    toast.error("Aconteceu um erro, tente novamente mais tarde")
   }
-
 
   return (
     <div className='flex w-[1000px]'>
