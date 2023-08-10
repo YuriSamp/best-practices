@@ -4,9 +4,6 @@ import React, { useEffect } from 'react'
 import { Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
-
-
 
 const Auth = () => {
   const supabase = createClientComponentClient()
@@ -16,8 +13,6 @@ const Auth = () => {
       provider: 'github',
     })
   }
-
-
 
   useEffect(() => {
     async function getSession() {

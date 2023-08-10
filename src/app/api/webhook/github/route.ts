@@ -1,31 +1,13 @@
-import { App } from 'octokit'
 import type { PullRequestEvent } from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
-import { getSupabaseClient } from '@/db/getSupabaseClient'
-
-const IGNORED_FILES = [
-  '.yml',
-  '.yaml',
-  '.md',
-  '.json',
-  '.lock',
-  '.git',
-  '.example',
-  '.config.',
-  '.init.',
-  'LICENSE',
-]
+import { getSupabaseClient } from '@/server/getSupabaseClient'
+import { getGithubClient } from '@/server/getGithubClient'
+import { commentOnPr } from './commentOnPr'
+import { BASE_LIMIT_EXCEEDED } from './prCommentTemplates'
+import { isValidFileExtension } from './FileExtensionsValidator'
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
-  const supabase = getSupabaseClient()
-  const { data, error } = await supabase.from('Projects').select()
-
-  if (error) {
-    return new Response(null, {
-      status: 500,
-    })
-  }
 
   if (eventType !== 'pull_request') {
     return new Response(null, {
@@ -34,17 +16,6 @@ export async function POST(request: Request) {
   }
 
   const event: PullRequestEvent = await request.json()
-  const appId = process.env.GITHUB_APP_ID as string
-  const secret = process.env.WEBHOOK_SECRET as string
-  const privateKey = process.env.PRIVATE_KEY as string
-
-  const app = new App({
-    appId,
-    privateKey,
-    webhooks: {
-      secret,
-    },
-  })
 
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
     return new Response(null, {
@@ -52,36 +23,55 @@ export async function POST(request: Request) {
     })
   }
 
-  const repo = data.filter(
-    (repository) => repository.title === event.repository.name
-  )[0]
+  const supabase = getSupabaseClient()
+  const app = getGithubClient()
+  const { data, error } = await supabase.from('Projects').select()
+
+  if (error) {
+    return new Response(null, {
+      status: 500,
+    })
+  }
+
+  const repository = data
+    .find((repository) => repository.title === event.repository.name)
+    .at(0)
+
+  const octokit = await app.getInstallationOctokit(event.installation.id)
 
   try {
     const { data } = await supabase.from('Comments').select()
     const coments = data?.filter(
-      (coments) => coments.project_id === repo.id
+      (coments) => coments.project_id === repository.id
     ).length
-    console.log(coments)
+
     if (coments && coments >= 5) {
-      return new Response('REACHED MAX COMMENT FOR FREE ACCOUNT', {
-        status: 500,
+      const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
+        '$USER',
+        event.repository.owner.login
+      )
+
+      const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
+
+      if (error) {
+        throw Error(error.message)
+      }
+
+      return new Response(null, {
+        status: 200,
       })
     }
-  } catch (error) {
-    console.log(error)
+  } catch (error: any) {
+    return new Response(error.message, {
+      status: 500,
+    })
   }
-
-  const octokit = await app.getInstallationOctokit(event.installation.id)
 
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
     repo: event.repository.name,
     pull_number: event.number,
   })
-
-  const isValidFileExtension = (line: string) => {
-    return !IGNORED_FILES.some((ext) => line.includes(ext))
-  }
 
   let prChanges = ''
 
@@ -92,25 +82,21 @@ export async function POST(request: Request) {
     }
   })
 
-  const aiAnalysis = await gptAnalysisResult(prChanges, repo.rules)
+  const aiAnalysis = await gptAnalysisResult(prChanges, repository.rules)
 
   try {
     if (!aiAnalysis) {
       throw Error('Fail on get Gpt analysis')
     }
 
-    await octokit.request(
-      'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-      {
-        owner: event.repository.owner.login,
-        repo: event.repository.name,
-        issue_number: event.number,
-        body: aiAnalysis,
-      }
-    )
+    const { error } = await commentOnPr(aiAnalysis, event)
+
+    if (error) {
+      throw Error(error.message)
+    }
 
     await supabase.from('Comments').insert({
-      project_id: repo.id,
+      project_id: repository.id,
       token_count: 0,
     })
   } catch (error: any) {
