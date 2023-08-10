@@ -7,6 +7,7 @@ import Navbar from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 type Projects = {
   name: string
@@ -18,6 +19,7 @@ const Dashboard = () => {
 
   const [projects, setProjects] = useState<Projects[]>(teste)
   const [repoSelect, setRepoSelected] = useState('')
+  const supabase = createClientComponentClient()
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -39,6 +41,7 @@ const Dashboard = () => {
           {!!repoSelect.length ?
             <RulesBox
               repository={repoSelect}
+              supabase={supabase}
             />
             :
             <span className='text-4xl'>Select a project to add some rules</span>
