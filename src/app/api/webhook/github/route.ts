@@ -28,8 +28,7 @@ export async function POST(request: Request) {
   const { data, error } = await supabase.from('Projects').select()
 
   if (error) {
-    console.log(error)
-    return new Response(null, {
+    return new Response(error.message, {
       status: 500,
     })
   }
@@ -55,7 +54,6 @@ export async function POST(request: Request) {
       const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
 
       if (error) {
-        console.log(error)
         throw Error(error.message)
       }
 
@@ -94,7 +92,6 @@ export async function POST(request: Request) {
     const { error } = await commentOnPr(aiAnalysis, event)
 
     if (error) {
-      console.log(error)
       throw Error(error.message)
     }
 

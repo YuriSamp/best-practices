@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import useSessionStore from '@/store/useSessionStore'
 
 type Projects = {
   name: string
@@ -28,6 +29,19 @@ const Dashboard = () => {
   //   }
   //   fetchData()
   // }, [])
+
+  const { error, fetchUsers } = useSessionStore((state) => ({
+    error: state.error,
+    fetchUsers: state.fetchUsers,
+  }))
+
+  useEffect(() => {
+    fetchUsers()
+
+    if (error) {
+      toast.error('Não foi possivel pegar o usuário')
+    }
+  }, [fetchUsers, error])
 
   return (
     <main className='flex flex-row-reverse bg-[#f3f0e8] min-h-screen'>
