@@ -3,12 +3,13 @@ import { useRouter } from 'next/navigation'
 import React, { Dispatch, SetStateAction } from 'react'
 
 
-type Projects = {
+type Repository = {
   name: string
   id: number
 }
+
 interface SidebarProps {
-  projects: Projects[]
+  projects: Repository[] | null
   repoSelect: string
   setRepoSelected: Dispatch<SetStateAction<string>>
 }
@@ -40,7 +41,7 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
             <p className='text-xl'>Add a project</p>
           </button>
         </li>
-        {projects.map(project =>
+        {projects && projects.map(project =>
         (<li className={`mx-4 rounded-xl ${repoSelect === project.name ? 'bg-[#dcb482]' : 'bg-[#f3f0e8]'}  text-black  cursor-pointer flex`} key={project.id}>
           <button className='flex-grow flex justify-between items-center px-4 py-5' onClick={() => handleSelectRepo(project.name)}>
             <Folder />

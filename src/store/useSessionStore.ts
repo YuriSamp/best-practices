@@ -39,11 +39,6 @@ const useSessionStore = create<Store>()((set) => ({
       }))
     }
   },
-
-  // In our example we only need to fetch the users, but you'd probably want to define other methods here
-  // addUser: async (user) => {},
-  // updateUser: async (user) => {},
-  // deleteUser: async (id) => {},
 }))
 
 export default useSessionStore

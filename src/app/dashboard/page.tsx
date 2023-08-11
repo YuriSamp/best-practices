@@ -6,29 +6,20 @@ import Sidebar from '@/components/sidebar'
 import Navbar from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import useSessionStore from '@/store/useSessionStore'
+import { useRepositoriesStore } from '@/store/useRepositoriesStore'
 
-type Projects = {
-  name: string
-  id: number
-}
-
-const teste = [{ name: 'teste1', id: 1 }, { name: 'teste2', id: 2 }, { name: 'teste3', id: 4 }, { name: 'teste4', id: 5 }, { name: 'teste5', id: 13 }, { name: 'teste6', id: 7 }]
 const Dashboard = () => {
 
-  const [projects, setProjects] = useState<Projects[]>(teste)
   const [repoSelect, setRepoSelected] = useState('')
   const supabase = createClientComponentClient()
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const repositories = await axios.get('../api/repository')
-  //     setProjects(repositories.data.repositories.data.repositories)
-  //   }
-  //   fetchData()
-  // }, [])
+  const { fetchProjects, projectsError, projects } = useRepositoriesStore((state) => ({
+    fetchProjects: state.fetchProjects,
+    projects: state.projects,
+    projectsError: state.error
+  }))
 
   const { error, fetchUsers } = useSessionStore((state) => ({
     error: state.error,
@@ -37,11 +28,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchUsers()
+    fetchProjects()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+
+  useEffect(() => {
+    if (projectsError) {
+      toast.error('Não foi possivel pegar os repositorios')
+      return
+    }
     if (error) {
       toast.error('Não foi possivel pegar o usuário')
     }
-  }, [fetchUsers, error])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <main className='flex flex-row-reverse bg-[#f3f0e8] min-h-screen'>
