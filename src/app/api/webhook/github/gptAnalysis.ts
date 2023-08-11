@@ -39,7 +39,3 @@ export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
 
   return { content, tokens, openAiError }
 }
-
-10000 tokens = 15 reais
-30000 tokens = 40 reais
-70000 tokens = 80 reais 
