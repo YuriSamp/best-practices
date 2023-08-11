@@ -14,7 +14,7 @@ export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
   let openAiError
   try {
     const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo-0301',
+      model: 'gpt-3.5-turbo-16k',
       messages: [
         {
           role: 'user',
@@ -39,3 +39,7 @@ export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
 
   return { content, tokens, openAiError }
 }
+
+10000 tokens = 15 reais
+30000 tokens = 40 reais
+70000 tokens = 80 reais 
