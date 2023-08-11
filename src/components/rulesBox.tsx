@@ -5,17 +5,6 @@ import { Button } from './ui/button'
 import { SupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { toast } from 'react-toastify';
 
-type Principle = {
-  category: string;
-  description: string;
-  id: number;
-  bestPractices: {
-    name: string;
-    id: number;
-    description: string;
-  }[];
-}
-
 interface Props {
   supabase: SupabaseClient<any, "public", any>
   repository: string
@@ -96,7 +85,7 @@ const RulesBox = ({ repository, supabase }: Props) => {
       </div>
       <div className='flex flex-col items-center'>
         <h1 className='text-3xl mb-10'>The rules you chose</h1>
-        <ul className='flex flex-wrap gap-4 px-10 h-[350px] min-w-[600px] overflow-y-scroll items-center justify-center'>
+        <ul className='flex flex-wrap  gap-4 px-10 h-[350px] min-w-[600px] overflow-y-scroll justify-center items-start'>
           {options.map((pratices, id) => <li className='px-2 h-7 flex items-center border border-neutral-300 text-lg rounded-full' key={id}>{pratices}</li>)}
         </ul>
         <div className='flex gap-5 mt-10'>
