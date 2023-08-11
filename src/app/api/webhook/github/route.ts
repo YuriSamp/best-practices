@@ -82,14 +82,17 @@ export async function POST(request: Request) {
     }
   })
 
-  const aiAnalysis = await gptAnalysisResult(prChanges, repository.rules)
+  const { content, openAiError, tokens } = await gptAnalysisResult(
+    prChanges,
+    repository.rules
+  )
 
   try {
-    if (!aiAnalysis) {
+    if (openAiError) {
       throw Error('Fail on get Gpt analysis')
     }
 
-    const { error } = await commentOnPr(aiAnalysis, event)
+    const { error } = await commentOnPr(content, event)
 
     if (error) {
       throw Error(error.message)
@@ -97,7 +100,7 @@ export async function POST(request: Request) {
 
     await supabase.from('Comments').insert({
       project_id: repository.id,
-      token_count: 0,
+      token_count: tokens,
     })
   } catch (error: any) {
     return new Response(error.message, {

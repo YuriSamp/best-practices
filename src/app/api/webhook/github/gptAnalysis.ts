@@ -8,6 +8,10 @@ const openai = new OpenAIApi(configuration)
 
 export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
   const stringRules = rules.toString()
+
+  let content = ''
+  let tokens = 0
+  let openAiError
   try {
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo-0301',
@@ -27,8 +31,11 @@ export const gptAnalysisResult = async (prBody: string, rules: string[]) => {
       throw Error('Fail on Get gpt analysis')
     }
 
-    return response.data.choices[0].message.content
-  } catch (error) {
-    console.log(error)
+    content = response.data.choices[0].message.content || ''
+    tokens = response.data.usage?.total_tokens || 0
+  } catch (err) {
+    openAiError = err
   }
+
+  return { content, tokens, openAiError }
 }
