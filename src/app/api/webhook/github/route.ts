@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   }
 
   const repository = data
-    .find((repository) => repository.title === event.repository.name)
+    .filter((repository) => repository.title === event.repository.name)
     .at(0)
 
   const octokit = await app.getInstallationOctokit(event.installation.id)
