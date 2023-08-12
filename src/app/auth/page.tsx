@@ -1,26 +1,26 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+
+const devUrl = 'http://localhost:3000/dashboard'
 
 const Auth = () => {
+  const router = useRouter()
   const supabase = createClientComponentClient()
 
   async function signInWithGitHub() {
-    const { error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: 'github',
+      options: {
+        redirectTo: devUrl,
+      }
     })
+    router.refresh()
   }
-
-  useEffect(() => {
-    async function getSession() {
-      const { data, } = await supabase.auth.getSession()
-      console.log(data)
-    }
-    getSession()
-  }, [])
 
   return (
     <main className='w-full min-h-screen flex justify-center items-center'>

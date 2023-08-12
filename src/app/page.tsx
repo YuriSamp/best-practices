@@ -37,9 +37,11 @@ export default function Home() {
         </h3>
       </div>
       <section className='my-10'>
-        <Button>
-          <Link href={'/auth'}>Get Started</Link>
-        </Button>
+        <Link href={'/auth'}>
+          <Button>
+            Get Started
+          </Button>
+        </Link>
       </section>
       <section className='my-10'>
         <div className='my-5 flex justify-between gap-10' >

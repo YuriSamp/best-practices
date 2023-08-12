@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Leaf, Check } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import axios from 'axios'
-import { StripePrice } from '@/types'
+import { StripePrice } from '@/types/stripe'
 
 const Prices = () => {
 

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar } from '@/components/ui/avatar'
 import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
+import Link from 'next/link'
 
 const AvatarWithDropdown = ({ url }: { url: string }) => {
   return (
@@ -22,7 +23,9 @@ const AvatarWithDropdown = ({ url }: { url: string }) => {
       <DropdownMenuContent className='mr-5' >
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={'/account'}>Profile</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
         <DropdownMenuItem>Subscription</DropdownMenuItem>
