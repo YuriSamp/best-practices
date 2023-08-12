@@ -3,13 +3,11 @@
 import React from 'react'
 import { Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
 import { getSupabaseClietSide } from '@/lib/supabase'
 
-const devUrl = 'http://localhost:3000/dashboard'
+const devUrl = 'http://localhost:3000/api/callback'
 
 const Auth = () => {
-  const router = useRouter()
   const supabase = getSupabaseClietSide()
 
   async function signInWithGitHub() {
@@ -19,7 +17,6 @@ const Auth = () => {
         redirectTo: devUrl,
       }
     })
-    router.refresh()
   }
 
   return (

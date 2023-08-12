@@ -1,8 +1,6 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import { App } from 'octokit'
-import { cookies } from 'next/headers'
-import { Database } from '@/types/supabase'
+import { getSupabaseServerSide } from '@/lib/supabase'
 
 export async function GET() {
   const appId = process.env.GITHUB_APP_ID as string
@@ -17,7 +15,7 @@ export async function GET() {
     },
   })
 
-  const supabase = createRouteHandlerClient<Database>({ cookies })
+  const supabase = getSupabaseServerSide()
 
   try {
     const session = await supabase.auth.getSession()
