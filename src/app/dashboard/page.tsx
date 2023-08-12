@@ -6,14 +6,14 @@ import Sidebar from '@/components/sidebar'
 import Navbar from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import useSessionStore from '@/store/useSessionStore'
 import { useRepositoriesStore } from '@/store/useRepositoriesStore'
+import { getSupabaseClietSide } from '@/lib/supabase'
 
 const Dashboard = () => {
 
   const [repoSelect, setRepoSelected] = useState('')
-  const supabase = createClientComponentClient()
+  const supabase = getSupabaseClietSide()
 
   const { fetchProjects, projectsError, projects } = useRepositoriesStore((state) => ({
     fetchProjects: state.fetchProjects,

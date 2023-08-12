@@ -3,14 +3,14 @@
 import React from 'react'
 import { Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import { getSupabaseClietSide } from '@/lib/supabase'
 
 const devUrl = 'http://localhost:3000/dashboard'
 
 const Auth = () => {
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const supabase = getSupabaseClietSide()
 
   async function signInWithGitHub() {
     await supabase.auth.signInWithOAuth({

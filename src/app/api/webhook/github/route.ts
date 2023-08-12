@@ -1,6 +1,6 @@
 import type { PullRequestEvent } from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
-import { getSupabaseClient } from '@/server/getSupabaseClient'
+import { getSupabaseServerSide } from '@/lib/supabase'
 import { getGithubClient } from '@/server/getGithubClient'
 import { commentOnPr } from './commentOnPr'
 import { BASE_LIMIT_EXCEEDED } from './prCommentTemplates'
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     })
   }
 
-  const supabase = getSupabaseClient()
+  const supabase = getSupabaseServerSide()
   const app = getGithubClient()
   const { data, error } = await supabase.from('Projects').select()
 
