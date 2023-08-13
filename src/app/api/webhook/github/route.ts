@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       .eq('user_id', user?.user_uid)
 
     if (error) {
-      console.log('erro na query dos logs com o id do user')
+      console.log({ queryID: error.message })
     }
 
     if (data && data?.length >= 5) {
