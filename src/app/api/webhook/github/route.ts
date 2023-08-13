@@ -70,12 +70,11 @@ export async function POST(request: Request) {
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
     .select()
-    .eq('user_uid', data[0].user)
+    .eq('userName', data[0].user)
 
   const user = userData?.at(0)
 
   if (retriveUserError) {
-    console.log(retriveUserError)
     return new Response(retriveUserError.message, {
       status: 500,
     })
@@ -148,7 +147,6 @@ export async function POST(request: Request) {
       user_id: user?.user_uid as string,
     })
   } catch (error: any) {
-    console.log(error)
     return new Response(error.message, {
       status: 500,
     })
