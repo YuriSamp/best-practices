@@ -25,7 +25,10 @@ export async function POST(request: Request) {
 
   const supabase = getSupabaseServerSide()
   const app = getGithubClient()
-  const { data, error } = await supabase.from('Projects').select()
+  const { data, error } = await supabase
+    .from('Projects')
+    .select()
+    .eq('title', event.repository.name)
 
   if (error) {
     return new Response(error.message, {
@@ -36,9 +39,10 @@ export async function POST(request: Request) {
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
     .select()
-    .eq('email', event.sender.email)
+    .eq('user_uid', data[0].user)
 
-  console.log({ email: event.sender.email })
+  const user = userData?.at(0)
+
   console.log({ user: userData })
 
   if (retriveUserError) {
@@ -47,7 +51,6 @@ export async function POST(request: Request) {
     })
   }
 
-  const user = userData?.at(0)
   if (user) {
     const { data, error } = await supabase
       .from('Logs')
