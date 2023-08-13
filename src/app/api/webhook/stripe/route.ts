@@ -5,6 +5,23 @@ import Stripe from 'stripe'
 const webhookSecret = process.env.STRIPE_PAYMENT_WEBHOOK_SECRET
 const localSecret = process.env.STRIPE_PAYMENT_WEBHOOK_LOCAL_SECRET
 
+const handleTier = (price: number) => {
+  let tokens = 0
+
+  switch (price) {
+    case 500:
+      tokens = 10000
+      break
+    case 1500:
+      tokens = 30000
+      break
+    case 3000:
+      tokens = 70000
+      break
+  }
+  return tokens
+}
+
 export async function POST(req: Request) {
   const body = await req.text()
   const signatureHeader = req.headers.get('Stripe-Signature') as string
@@ -37,6 +54,11 @@ export async function POST(req: Request) {
         session.subscription as string
       )
 
+      let tokens = 0
+      if (subscription.items.data[0].price.unit_amount) {
+        tokens = handleTier(subscription.items.data[0].price.unit_amount)
+      }
+
       const { error } = await supabase
         .from('Users')
         .update({
@@ -46,6 +68,7 @@ export async function POST(req: Request) {
             new Date(subscription.current_period_end * 1000)
           ),
           stripe_customer_id: subscription.customer as string,
+          tokens: tokens,
         })
         .eq('email', session.customer_details?.email)
 

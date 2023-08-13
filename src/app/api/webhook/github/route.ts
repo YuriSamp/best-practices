@@ -36,14 +36,14 @@ export async function POST(request: Request) {
     })
   }
 
+  console.log(event.sender.id)
+
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
     .select()
     .eq('user_uid', data[0].user)
 
   const user = userData?.at(0)
-
-  console.log({ user: userData })
 
   if (retriveUserError) {
     return new Response('teve um erro ao pegar o usuário', {
@@ -52,16 +52,12 @@ export async function POST(request: Request) {
   }
 
   if (user) {
-    const { data, error } = await supabase
+    const { data: logs, error } = await supabase
       .from('Logs')
       .select()
       .eq('user_id', user?.user_uid)
 
-    if (error) {
-      console.log({ queryID: error.message })
-    }
-
-    if (data && data?.length >= 5) {
+    if (logs && logs?.length >= 5) {
       const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
         '$USER',
         event.repository.owner.login
@@ -116,13 +112,11 @@ export async function POST(request: Request) {
       throw Error(error.message)
     }
 
-    const { error: inserError } = await supabase.from('Logs').insert({
+    await supabase.from('Logs').insert({
       project_id: repository?.id as number,
       token_count: tokens,
       user_id: user?.user_uid as string,
     })
-
-    console.log({ inserError })
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
