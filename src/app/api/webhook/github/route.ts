@@ -49,15 +49,11 @@ export async function POST(request: Request) {
 
   const event: PullRequestEvent = await request.json()
 
-  console.log('vamo verificar qq ce ta fazendo')
-
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
     return new Response(null, {
       status: 400,
     })
   }
-
-  console.log('irei abrir um pr')
 
   const { data, error } = await supabase
     .from('Projects')
@@ -65,6 +61,7 @@ export async function POST(request: Request) {
     .eq('title', event.repository.name)
 
   if (error) {
+    console.log(error)
     return new Response(error.message, {
       status: 500,
     })
@@ -78,6 +75,7 @@ export async function POST(request: Request) {
   const user = userData?.at(0)
 
   if (retriveUserError) {
+    console.log(retriveUserError)
     return new Response(retriveUserError.message, {
       status: 500,
     })
@@ -150,6 +148,7 @@ export async function POST(request: Request) {
       user_id: user?.user_uid as string,
     })
   } catch (error: any) {
+    console.log(error)
     return new Response(error.message, {
       status: 500,
     })
