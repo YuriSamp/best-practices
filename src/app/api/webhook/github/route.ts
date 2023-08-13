@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   try {
     const { data } = await supabase.from('Comments').select()
     const coments = data?.filter(
-      (coments) => coments.project_id === repository.id
+      (coments) => coments.project_id === repository?.id
     ).length
 
     if (coments && coments >= 5) {
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
   const { content, openAiError, tokens } = await gptAnalysisResult(
     prChanges,
-    repository.rules
+    repository?.rules as string[]
   )
 
   try {
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
     }
 
     await supabase.from('Comments').insert({
-      project_id: repository.id,
+      project_id: repository?.id as number,
       token_count: tokens,
     })
   } catch (error: any) {

@@ -41,7 +41,7 @@ export interface Database {
         Row: {
           created_at: string | null
           id: number
-          rules: Json | null
+          rules: string[] | null
           title: string | null
           updated_at: string | null
           user: string | null
@@ -49,7 +49,7 @@ export interface Database {
         Insert: {
           created_at?: string | null
           id?: number
-          rules?: Json | null
+          rules?: string[] | null
           title?: string | null
           updated_at?: string | null
           user?: string | null
@@ -57,7 +57,7 @@ export interface Database {
         Update: {
           created_at?: string | null
           id?: number
-          rules?: Json | null
+          rules?: string[] | null
           title?: string | null
           updated_at?: string | null
           user?: string | null
@@ -65,6 +65,40 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "Projects_user_fkey"
+            columns: ["user"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      Projects_duplicate: {
+        Row: {
+          created_at: string | null
+          id: number
+          rules: string[] | null
+          title: string | null
+          updated_at: string | null
+          user: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          rules?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          rules?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+          user?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Projects_duplicate_user_fkey"
             columns: ["user"]
             referencedRelation: "users"
             referencedColumns: ["id"]
