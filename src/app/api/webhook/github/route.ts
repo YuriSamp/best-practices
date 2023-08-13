@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   if (eventType === 'installation_repositories') {
     const event: InstallationEvent = await request.json()
 
-    console.log({ event })
+    console.log({ repos: event.repositories })
 
     // const projectObj = {
     //   user: event.sender.login,
