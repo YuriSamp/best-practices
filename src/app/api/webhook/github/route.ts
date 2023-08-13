@@ -62,6 +62,7 @@ export async function POST(request: Request) {
     .eq('title', event.repository.name)
 
   if (error) {
+    console.log('erro ao pegar os repositorios')
     return new Response(error.message, {
       status: 500,
     })
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
   const user = userData?.at(0)
 
   if (retriveUserError) {
-    return new Response('teve um erro ao pegar o usuário', {
+    return new Response(retriveUserError.message, {
       status: 500,
     })
   }
@@ -109,7 +110,7 @@ export async function POST(request: Request) {
     .at(0)
 
   const octokit = await app.getInstallationOctokit(event.installation.id)
-
+  console.log(octokit)
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
     repo: event.repository.name,
