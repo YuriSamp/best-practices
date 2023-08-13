@@ -26,23 +26,23 @@ export async function POST(request: Request) {
   if (eventType === 'installation_repositories') {
     const event = await request.json()
     if (event.action === 'added') {
-      console.log({ repos: event.repositories_added })
+      //Depois eu tenho que iterar caso o usuário queira adicionar x repos
+      const projectObj = {
+        user: event.sender.login,
+        title: event.repositories_added.at(0).name,
+      }
+
+      console.log({ projectObj })
+
+      const { error } = await supabase.from('Projects').insert(projectObj)
+
+      if (error) {
+        return new Response(error.message, {
+          status: 200,
+        })
+      }
     }
 
-    // const projectObj = {
-    //   user: event.sender.login,
-    //   title: event,
-    // }
-
-    // console.log({ projectObj })
-
-    // const { error } = await supabase.from('Projects').insert(projectObj)
-
-    // if (error) {
-    //   return new Response(error.message, {
-    //     status: 200,
-    //   })
-    // }
     return new Response(null, {
       status: 200,
     })
