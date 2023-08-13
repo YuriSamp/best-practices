@@ -23,30 +23,25 @@ export async function POST(request: Request) {
 
   const supabase = getSupabaseServerSide()
   const app = getGithubClient()
+  const event: PullRequestEvent = await request.json()
 
   if (eventType === 'installation_repositories') {
-    const event: InstallationEvent = await request.json()
-
     const projectObj = {
       user: event.sender.login,
-      title: event.repositories?.at(0)?.name as string,
+      title: event.repository.name,
     }
-
-    console.log({ projectObj })
 
     const { error } = await supabase.from('Projects').insert(projectObj)
 
     if (error) {
       return new Response(error.message, {
-        status: 200,
+        status: 500,
       })
     }
     return new Response(null, {
       status: 200,
     })
   }
-
-  const event: PullRequestEvent = await request.json()
 
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
     return new Response(null, {
