@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       user_uid: data.user?.id || '',
       email: data.user?.email || '',
       image_url: data.user?.user_metadata.avatar_url,
+      userName: data.user?.user_metadata.user_name,
     }
 
     const { error } = await supabase.from('Users').insert(userObj)

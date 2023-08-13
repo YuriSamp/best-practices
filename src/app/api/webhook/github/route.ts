@@ -28,13 +28,19 @@ export async function POST(request: Request) {
     const event: InstallationEvent = await request.json()
 
     const projectObj = {
-      githubId: event.sender.id,
-      email: event.sender.email,
+      user: event.sender.login,
+      title: event.repositories?.at(0)?.name as string,
     }
 
     console.log({ projectObj })
 
-    // const {} = supabase.from('Projects').insert(projectObj)
+    const { error } = await supabase.from('Projects').insert(projectObj)
+
+    if (error) {
+      return new Response(error.message, {
+        status: 200,
+      })
+    }
     return new Response(null, {
       status: 200,
     })

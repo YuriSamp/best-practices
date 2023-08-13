@@ -53,7 +53,7 @@ export interface Database {
           rules: string[] | null
           title: string
           updated_at: string | null
-          user: string
+          user: string | null
         }
         Insert: {
           created_at?: string
@@ -61,7 +61,7 @@ export interface Database {
           rules?: string[] | null
           title: string
           updated_at?: string | null
-          user: string
+          user?: string | null
         }
         Update: {
           created_at?: string
@@ -69,14 +69,14 @@ export interface Database {
           rules?: string[] | null
           title?: string
           updated_at?: string | null
-          user?: string
+          user?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "Projects_user_fkey"
             columns: ["user"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "Users"
+            referencedColumns: ["userName"]
           }
         ]
       }
@@ -93,6 +93,7 @@ export interface Database {
           tokens: number | null
           updated_at: string | null
           user_uid: string
+          userName: string
         }
         Insert: {
           created_at?: string
@@ -106,6 +107,7 @@ export interface Database {
           tokens?: number | null
           updated_at?: string | null
           user_uid: string
+          userName: string
         }
         Update: {
           created_at?: string
@@ -119,6 +121,7 @@ export interface Database {
           tokens?: number | null
           updated_at?: string | null
           user_uid?: string
+          userName?: string
         }
         Relationships: [
           {
