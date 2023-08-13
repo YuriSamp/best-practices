@@ -38,6 +38,9 @@ export async function POST(request: Request) {
     .select()
     .eq('email', event.sender.email)
 
+  console.log({ email: event.sender.email })
+  console.log({ user: userData })
+
   if (retriveUserError) {
     return new Response('teve um erro ao pegar o usuário', {
       status: 500,
@@ -45,7 +48,6 @@ export async function POST(request: Request) {
   }
 
   const user = userData?.at(0)
-  console.log(user)
   if (user) {
     const { data, error } = await supabase
       .from('Logs')
