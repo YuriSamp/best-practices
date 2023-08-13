@@ -45,8 +45,8 @@ export async function POST(request: Request) {
   }
 
   const user = userData?.at(0)
-
-  if (userData) {
+  console.log(user)
+  if (user) {
     const { data, error } = await supabase
       .from('Logs')
       .select()
