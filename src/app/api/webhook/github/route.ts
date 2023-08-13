@@ -23,6 +23,7 @@ export async function POST(request: Request) {
 
   const supabase = getSupabaseServerSide()
   const app = getGithubClient()
+
   if (eventType === 'installation_repositories') {
     const event = await request.json()
     if (event.action === 'added') {
@@ -31,8 +32,6 @@ export async function POST(request: Request) {
         user: event.sender.login,
         title: event.repositories_added.at(0).name,
       }
-
-      console.log({ projectObj })
 
       const { error } = await supabase.from('Projects').insert(projectObj)
 
@@ -50,11 +49,15 @@ export async function POST(request: Request) {
 
   const event: PullRequestEvent = await request.json()
 
+  console.log('vamo verificar qq ce ta fazendo')
+
   if (!['reopened', 'opened'].includes(event.action) || !event?.installation) {
     return new Response(null, {
       status: 400,
     })
   }
+
+  console.log('irei abrir um pr')
 
   const { data, error } = await supabase
     .from('Projects')
@@ -62,7 +65,6 @@ export async function POST(request: Request) {
     .eq('title', event.repository.name)
 
   if (error) {
-    console.log('erro ao pegar os repositorios')
     return new Response(error.message, {
       status: 500,
     })
@@ -110,7 +112,7 @@ export async function POST(request: Request) {
     .at(0)
 
   const octokit = await app.getInstallationOctokit(event.installation.id)
-  console.log(octokit)
+
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
     repo: event.repository.name,
