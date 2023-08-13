@@ -9,58 +9,67 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      Comments: {
+      Logs: {
         Row: {
           created_at: string
           id: number
           project_id: number
-          token_count: number | null
+          token_count: number
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
           project_id: number
-          token_count?: number | null
+          token_count: number
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: number
           project_id?: number
-          token_count?: number | null
+          token_count?: number
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "Comments_project_id_fkey"
+            foreignKeyName: "Logs_project_id_fkey"
             columns: ["project_id"]
             referencedRelation: "Projects"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Logs_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "Users"
+            referencedColumns: ["user_uid"]
           }
         ]
       }
       Projects: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           rules: string[] | null
-          title: string | null
+          title: string
           updated_at: string | null
-          user: string | null
+          user: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           rules?: string[] | null
-          title?: string | null
+          title: string
           updated_at?: string | null
-          user?: string | null
+          user: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           rules?: string[] | null
-          title?: string | null
+          title?: string
           updated_at?: string | null
-          user?: string | null
+          user?: string
         }
         Relationships: [
           {
@@ -71,44 +80,10 @@ export interface Database {
           }
         ]
       }
-      Projects_duplicate: {
-        Row: {
-          created_at: string | null
-          id: number
-          rules: string[] | null
-          title: string | null
-          updated_at: string | null
-          user: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          rules?: string[] | null
-          title?: string | null
-          updated_at?: string | null
-          user?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          rules?: string[] | null
-          title?: string | null
-          updated_at?: string | null
-          user?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Projects_duplicate_user_fkey"
-            columns: ["user"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       Users: {
         Row: {
           created_at: string
-          email: string | null
+          email: string
           email_verified: string | null
           image_url: string | null
           stripe_current_period_end: string | null
@@ -121,7 +96,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string
-          email?: string | null
+          email: string
           email_verified?: string | null
           image_url?: string | null
           stripe_current_period_end?: string | null
@@ -134,7 +109,7 @@ export interface Database {
         }
         Update: {
           created_at?: string
-          email?: string | null
+          email?: string
           email_verified?: string | null
           image_url?: string | null
           stripe_current_period_end?: string | null

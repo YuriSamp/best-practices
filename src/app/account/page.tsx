@@ -1,17 +1,15 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { getSupabaseClietSide } from '@/lib/supabase'
 import React, { useEffect, useState } from 'react'
 
 const Account = () => {
-  const supabase = createClientComponentClient()
+  const supabase = getSupabaseClietSide()
   const [tokens, setTokens] = useState(0)
 
 
   useEffect(() => {
     const getTokens = async () => {
-      const { data } = await supabase.from('Comments').select('token_count')
-      setTokens(data?.map(item => item.token_count).reduce((a, b) => a + b))
     }
     getTokens()
   }, [])

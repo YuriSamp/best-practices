@@ -33,19 +33,30 @@ export async function POST(request: Request) {
     })
   }
 
-  const repository = data
-    .filter((repository) => repository.title === event.repository.name)
-    .at(0)
+  const { data: userData, error: retriveUserError } = await supabase
+    .from('Users')
+    .select()
+    .eq('email', event.sender.email)
 
-  const octokit = await app.getInstallationOctokit(event.installation.id)
+  if (retriveUserError) {
+    return new Response('teve um erro ao pegar o usuário', {
+      status: 500,
+    })
+  }
 
-  try {
-    const { data } = await supabase.from('Comments').select()
-    const coments = data?.filter(
-      (coments) => coments.project_id === repository?.id
-    ).length
+  const user = userData?.at(0)
 
-    if (coments && coments >= 5) {
+  if (userData) {
+    const { data, error } = await supabase
+      .from('Logs')
+      .select()
+      .eq('user_id', user?.user_uid)
+
+    if (error) {
+      console.log('erro na query dos logs com o id do user')
+    }
+
+    if (data && data?.length >= 5) {
       const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
         '$USER',
         event.repository.owner.login
@@ -61,11 +72,13 @@ export async function POST(request: Request) {
         status: 200,
       })
     }
-  } catch (error: any) {
-    return new Response(error.message, {
-      status: 500,
-    })
   }
+
+  const repository = data
+    .filter((repository) => repository.title === event.repository.name)
+    .at(0)
+
+  const octokit = await app.getInstallationOctokit(event.installation.id)
 
   const files = await octokit.rest.pulls.listFiles({
     owner: event.repository.owner.login,
@@ -98,9 +111,10 @@ export async function POST(request: Request) {
       throw Error(error.message)
     }
 
-    await supabase.from('Comments').insert({
+    await supabase.from('Logs').insert({
       project_id: repository?.id as number,
       token_count: tokens,
+      user_id: user?.user_uid as string,
     })
   } catch (error: any) {
     return new Response(error.message, {
