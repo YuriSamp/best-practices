@@ -24,9 +24,10 @@ export async function POST(request: Request) {
   const supabase = getSupabaseServerSide()
   const app = getGithubClient()
   if (eventType === 'installation_repositories') {
-    const event: InstallationEvent = await request.json()
-
-    console.log({ repos: event.repositories })
+    const event = await request.json()
+    if (event.action === 'added') {
+      console.log({ repos: event.repositories_added })
+    }
 
     // const projectObj = {
     //   user: event.sender.login,
