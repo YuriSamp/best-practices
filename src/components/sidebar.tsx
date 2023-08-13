@@ -4,25 +4,25 @@ import React, { Dispatch, SetStateAction } from 'react'
 
 
 type Repository = {
-  name: string
+  rules: null | string[]
+  title: string
   id: number
 }
 
 interface SidebarProps {
-  projects: Repository[] | null
-  repoSelect: string
-  setRepoSelected: Dispatch<SetStateAction<string>>
+  projects: Repository[]
+  repoSelect: Repository | null | undefined
+  setRepoSelected: Dispatch<SetStateAction<Repository | null | undefined>>
 }
-
 
 const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
   const router = useRouter()
 
   const handleSelectRepo = (repo: string) => {
-    if (repoSelect === repo) {
-      setRepoSelected('')
+    if (repoSelect?.title === repo) {
+      return
     } else {
-      setRepoSelected(repo)
+      setRepoSelected(projects?.filter(project => project.title === repo).at(0))
     }
   }
 
@@ -42,10 +42,10 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
           </button>
         </li>
         {projects && projects.map(project =>
-        (<li className={`mx-4 rounded-xl ${repoSelect === project.name ? 'bg-[#dcb482]' : 'bg-[#f3f0e8]'}  text-black  cursor-pointer flex`} key={project.id}>
-          <button className='flex-grow flex justify-between items-center px-4 py-5' onClick={() => handleSelectRepo(project.name)}>
+        (<li className={`mx-4 rounded-xl ${repoSelect?.title === project.title ? 'bg-[#dcb482]' : 'bg-[#f3f0e8]'}  text-black  cursor-pointer flex`} key={project.id}>
+          <button className='flex-grow flex justify-between items-center px-4 py-5' onClick={() => handleSelectRepo(project.title)}>
             <Folder />
-            <p className='text-xl '>{project.name}</p>
+            <p className='text-xl '>{project.title}</p>
           </button>
         </li>))}
       </ul>

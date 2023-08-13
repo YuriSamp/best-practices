@@ -7,19 +7,19 @@ import Navbar from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useSessionStore from '@/store/useSessionStore'
-import { useRepositoriesStore } from '@/store/useRepositoriesStore'
 import { getSupabaseClietSide } from '@/lib/supabase'
+
+type Repository = {
+  rules: null | string[]
+  title: string
+  id: number
+}
 
 const Dashboard = () => {
 
-  const [repoSelect, setRepoSelected] = useState('')
   const supabase = getSupabaseClietSide()
-
-  const { fetchProjects, projectsError, projects } = useRepositoriesStore((state) => ({
-    fetchProjects: state.fetchProjects,
-    projects: state.projects,
-    projectsError: state.error
-  }))
+  const [projects, setProjects] = useState<Repository[]>([])
+  const [repoSelect, setRepoSelected] = useState<Repository | null>()
 
   const { error, fetchUsers } = useSessionStore((state) => ({
     error: state.error,
@@ -27,17 +27,27 @@ const Dashboard = () => {
   }))
 
   useEffect(() => {
+    (async function GetRepositories() {
+      const { data } = await supabase.auth.getUser()
+
+      const { data: repos, error } = await supabase
+        .from('Projects')
+        .select()
+        .eq('user', data.user?.user_metadata.user_name)
+
+      if (error) {
+        toast.error('Não foi possivel pegar os repositorios')
+        return
+      }
+
+      setProjects(repos)
+    })()
     fetchUsers()
-    fetchProjects()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
   useEffect(() => {
-    if (projectsError) {
-      toast.error('Não foi possivel pegar os repositorios')
-      return
-    }
     if (error) {
       toast.error('Não foi possivel pegar o usuário')
     }
@@ -53,10 +63,9 @@ const Dashboard = () => {
             position='top-center'
             theme='dark'
           />
-          {!!repoSelect.length ?
+          {repoSelect ?
             <RulesBox
               repository={repoSelect}
-              supabase={supabase}
             />
             :
             <span className='text-4xl'>Select a project to add some rules</span>
