@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     })
   }
 
-  console.log(event.sender.id)
+  console.log({ senderId: event.sender.id })
 
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
