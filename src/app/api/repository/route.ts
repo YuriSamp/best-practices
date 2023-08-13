@@ -30,7 +30,9 @@ export async function GET() {
     })
 
     const octokit = await app.getInstallationOctokit(user[0].id)
+    console.log({ octokit })
     const repositories = await octokit.request('GET /installation/repositories')
+    console.log({ userID: repositories.data.repositories[0].owner.id })
     return NextResponse.json({ repositories })
   } catch (error) {
     console.log(error)

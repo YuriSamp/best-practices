@@ -9,6 +9,8 @@ import { isValidFileExtension } from './FileExtensionsValidator'
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
 
+  console.log({ eventType })
+
   if (eventType !== 'pull_request') {
     return new Response(null, {
       status: 200,
@@ -35,8 +37,6 @@ export async function POST(request: Request) {
       status: 500,
     })
   }
-
-  console.log({ senderId: event.sender.id })
 
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
