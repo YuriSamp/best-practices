@@ -28,7 +28,9 @@ const AvatarWithDropdown = ({ url }: { url: string }) => {
         </DropdownMenuItem>
         <DropdownMenuItem>Billing</DropdownMenuItem>
         <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={'/prices'}>Subscription</Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

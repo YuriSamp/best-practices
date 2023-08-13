@@ -1,8 +1,8 @@
-import { SupabaseClient, createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
-export const getSupabaseServerSide = (): SupabaseClient => {
+export const getSupabaseServerSide = () => {
   const client = createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL as string,
     process.env.SUPABASE_SERVICE_ROLE as string
@@ -10,7 +10,7 @@ export const getSupabaseServerSide = (): SupabaseClient => {
   return client
 }
 
-export const getSupabaseClietSide = (): SupabaseClient => {
+export const getSupabaseClietSide = () => {
   const supabase = createClientComponentClient<Database>()
   return supabase
 }

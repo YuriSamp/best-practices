@@ -18,8 +18,6 @@ const Prices = () => {
     getData()
   }, [])
 
-  console.log(prices)
-
   const handleCheckout = async (id: string) => {
     const { data } = await axios.post('../api/checkout', {
       id: id
