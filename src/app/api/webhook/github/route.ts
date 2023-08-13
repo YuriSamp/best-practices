@@ -111,11 +111,13 @@ export async function POST(request: Request) {
       throw Error(error.message)
     }
 
-    await supabase.from('Logs').insert({
+    const { error: inserError } = await supabase.from('Logs').insert({
       project_id: repository?.id as number,
       token_count: tokens,
       user_id: user?.user_uid as string,
     })
+
+    console.log({ inserError })
   } catch (error: any) {
     return new Response(error.message, {
       status: 500,
