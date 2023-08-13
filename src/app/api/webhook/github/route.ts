@@ -27,16 +27,17 @@ export async function POST(request: Request) {
   if (eventType === 'installation_repositories') {
     const event: InstallationEvent = await request.json()
 
-    if (event.action === 'created' && event.repositories) {
-      const projectObj = {
-        title: event.repositories[0].name,
-        githubId: event.sender.id,
-        email: event.sender.email,
-      }
-
-      console.log({ projectObj })
-      // const {} = supabase.from('Projects').insert(projectObj)
+    const projectObj = {
+      githubId: event.sender.id,
+      email: event.sender.email,
     }
+
+    console.log({ projectObj })
+
+    // const {} = supabase.from('Projects').insert(projectObj)
+    return new Response(null, {
+      status: 200,
+    })
   }
 
   const event: PullRequestEvent = await request.json()
