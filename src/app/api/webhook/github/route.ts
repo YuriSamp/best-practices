@@ -1,4 +1,7 @@
-import type { PullRequestEvent } from '@octokit/webhooks-types'
+import type {
+  InstallationEvent,
+  PullRequestEvent,
+} from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import { getGithubClient } from '@/server/getGithubClient'
@@ -9,12 +12,31 @@ import { isValidFileExtension } from './FileExtensionsValidator'
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
 
-  console.log({ eventType })
-
-  if (eventType !== 'pull_request') {
+  if (
+    eventType !== 'pull_request' &&
+    eventType !== 'installation_repositories'
+  ) {
     return new Response(null, {
       status: 200,
     })
+  }
+
+  const supabase = getSupabaseServerSide()
+  const app = getGithubClient()
+
+  if (eventType === 'installation_repositories') {
+    const event: InstallationEvent = await request.json()
+
+    if (event.action === 'created' && event.repositories) {
+      const projectObj = {
+        title: event.repositories[0].name,
+        githubId: event.sender.id,
+        email: event.sender.email,
+      }
+
+      console.log({ projectObj })
+      // const {} = supabase.from('Projects').insert(projectObj)
+    }
   }
 
   const event: PullRequestEvent = await request.json()
@@ -25,8 +47,6 @@ export async function POST(request: Request) {
     })
   }
 
-  const supabase = getSupabaseServerSide()
-  const app = getGithubClient()
   const { data, error } = await supabase
     .from('Projects')
     .select()
@@ -52,7 +72,7 @@ export async function POST(request: Request) {
   }
 
   if (user) {
-    const { data: logs, error } = await supabase
+    const { data: logs } = await supabase
       .from('Logs')
       .select()
       .eq('user_id', user?.user_uid)
