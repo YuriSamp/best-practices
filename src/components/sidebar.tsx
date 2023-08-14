@@ -1,7 +1,11 @@
-import { Folder, Github } from 'lucide-react'
+import { Folder } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { Dispatch, SetStateAction } from 'react'
-
+import { Avatar } from '@/components/ui/avatar'
+import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
+import useSessionStore from '@/store/useSessionStore'
+import { BsThreeDots } from 'react-icons/bs'
+import Link from 'next/link'
 
 type Repository = {
   rules: null | string[]
@@ -30,25 +34,43 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
     router.push('https://github.com/apps/pr-quality-checker/installations/select_target')
   }
 
+  const { session } = useSessionStore((state) => ({
+    session: state.session,
+  }))
 
   return (
-    <aside className='flex flex-col bg-neutral-800 h-screen z-20 text-white'>
-      <h2 className='mt-6 mb-14  text-3xl text-center'>Best-Pratices</h2>
-      <ul className='w-64  flex flex-col gap-3 p'>
-        <li className='mx-4 rounded-xl  cursor-pointer  bg-[#f3f0e8] text-black '>
-          <button className='h-full w-full flex justify-between items-center px-4 py-5' onClick={addOrganization}>
-            <Github />
-            <p className='text-xl'>Add a project</p>
-          </button>
-        </li>
-        {projects && projects.map(project =>
-        (<li className={`mx-4 rounded-xl ${repoSelect?.title === project.title ? 'bg-[#dcb482]' : 'bg-[#f3f0e8]'}  text-black  cursor-pointer flex`} key={project.id}>
-          <button className='flex-grow flex justify-between items-center px-4 py-5' onClick={() => handleSelectRepo(project.title)}>
-            <Folder />
-            <p className='text-xl '>{project.title}</p>
-          </button>
-        </li>))}
-      </ul>
+    <aside className='flex flex-col bg-[#121212] h-screen text-white relative w-80'>
+      <div className='mx-4 mt-24'>
+        <div className='flex justify-start my-4 text-2xl'>
+          <h2>Projects</h2>
+        </div>
+        <ul className='w-60 flex flex-col gap-3'>
+          <li className=' rounded-xl  cursor-pointer  bg-[#292524] text-white  '>
+            <button className='h-full w-full flex justify-center px-4 py-5' onClick={addOrganization}>
+              <p className='text-xl'>New project</p>
+            </button>
+          </li>
+          {projects && projects.map(project =>
+          (<li className={`rounded-xl ${repoSelect?.title === project.title ? 'bg-primary' : 'bg-[#292524] '} text-white cursor-pointer flex`} key={project.id}>
+            <button className='flex-grow flex justify-between items-center px-4 py-5' onClick={() => handleSelectRepo(project.title)}>
+              <Folder />
+              <p className='text-xl '>{project.title}</p>
+            </button>
+          </li>))}
+        </ul>
+      </div>
+      <div className='absolute bottom-0 bg-[#050505] w-full py-6 px-4 flex justify-between items-center '>
+        <div className='flex items-center gap-3'>
+          <Avatar >
+            <AvatarImage src={session?.user.user_metadata.avatar_url} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <span className='text-white text-xl'>Yuri</span>
+        </div>
+        <Link href={'/account'}>
+          <BsThreeDots className='w-6 h-6 hover:cursor-pointer' />
+        </Link>
+      </div>
     </aside>
   )
 }

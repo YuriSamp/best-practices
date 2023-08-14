@@ -55,28 +55,25 @@ const Dashboard = () => {
   }, [])
 
   return (
-    <main className='flex flex-row-reverse bg-[#f3f0e8] min-h-screen'>
-      <div className='flex flex-col w-full gap-10'>
-        <Navbar />
-        <section className='flex justify-center items-center h-full'>
-          <ToastContainer
-            position='top-center'
-            theme='dark'
-          />
-          {repoSelect ?
-            <RulesBox
-              repository={repoSelect}
-            />
-            :
-            <span className='text-4xl'>Select a project to add some rules</span>
-          }
-        </section>
-      </div>
+    <main className='flex  bg-background min-h-screen'>
       <Sidebar
         projects={projects}
         repoSelect={repoSelect}
         setRepoSelected={setRepoSelected}
       />
+      <section className='w-full h-full'>
+        <ToastContainer
+          position='top-center'
+          theme='dark'
+        />
+        {repoSelect ?
+          <RulesBox
+            repository={repoSelect}
+          />
+          :
+          <span className='text-4xl'>Select a project to add some rules</span>
+        }
+      </section>
     </main>
   )
 }

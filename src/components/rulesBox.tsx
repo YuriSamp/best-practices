@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import principles from '../principles.json'
 import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'
 import { toast } from 'react-toastify';
 import { getSupabaseClietSide } from '@/lib/supabase'
+import { Input } from './ui/input';
+import { Info } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface Props {
   repository: {
@@ -14,8 +22,12 @@ interface Props {
 }
 
 const RulesBox = ({ repository }: Props) => {
-  const [options, setOptions] = useState<string[]>(repository.rules || [])
+  const [options, setOptions] = useState<string[]>([])
   const supabase = getSupabaseClietSide()
+
+  useEffect(() => {
+    setOptions(repository.rules || [])
+  }, [repository])
 
   const handleCheck = (pratices: string) => {
     if (options.filter(item => item === pratices).length > 0) {
@@ -44,9 +56,14 @@ const RulesBox = ({ repository }: Props) => {
   }
 
   return (
-    <div className='flex w-[1000px]'>
-      <div className='w-1/2'>
-        <ul className='min-w-[370px] max-h-[500px] self-start overflow-scroll overflow-x-hidden ml-7'>
+    <div className='flex mt-10 mx-14'>
+      <div className='w-1/2 '>
+        <h2 className='text-3xl mb-10 text-center'>Rules to choose</h2>
+        <div className='w-full flex gap-3'>
+          <Input className='bg-background focus:ring-transparent border rounded-lg' />
+          <Button className='bg-primary text-primary-foreground'>Search</Button>
+        </div>
+        <ul className='max-h-[75vh] self-start overflow-scroll overflow-x-hidden mt-10'>
           {principles.map(principle => (
             <div className='pb-5 mb-5 border-b border-neutral-400' key={principle.id}>
               <h2 className='w-full text-xl font-medium h-12 flex items-center'>{principle.category}</h2>
@@ -57,7 +74,17 @@ const RulesBox = ({ repository }: Props) => {
                       checked={options && !!options.filter(options => options === pratices.name).length}
                       onCheckedChange={() => handleCheck(pratices.name)}
                     />
-                    <h2 className='text-lg' title={pratices.description}>{pratices.name}</h2>
+                    <h2 className='text-lg'>{pratices.name}</h2>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info className='w-5 h-5 text-neutral-500' />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className='max-w-xs'>{pratices.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </div>
               ))}
@@ -65,14 +92,16 @@ const RulesBox = ({ repository }: Props) => {
           ))}
         </ul>
       </div>
-      <div className='flex flex-col items-center'>
-        <h1 className='text-3xl mb-10'>The rules you chose</h1>
-        <ul className='flex flex-wrap  gap-4 px-10 h-[350px] min-w-[600px] overflow-y-scroll justify-center items-start'>
-          {options && options.map((pratices, id) => <li className='px-2 h-7 flex items-center border border-neutral-300 text-lg rounded-full' key={id}>{pratices}</li>)}
-        </ul>
+      <div className='flex flex-col items-center w-1/2'>
+        <h2 className='text-3xl mb-10'>Rules selected</h2>
+        <div className='h-4/5'>
+          <ul className='flex flex-wrap gap-4 px-10 w-full overflow-y-scroll justify-center items-center'>
+            {options && options.map((pratices, id) => <li className='px-2 py-2 flex items-center bg-[#292524] text-white text-lg rounded-xl' key={id}>{pratices}</li>)}
+          </ul>
+        </div>
         <div className='flex gap-5 mt-10'>
-          <Button className='bg-red-600' onClick={handleReset}>Reset</Button>
-          <Button onClick={() => handleSaveOptions(repository.title)}>Save</Button>
+          <Button className='bg-secondary text-secondary-foreground hover:text-primary-foreground w-24 h-16' onClick={handleReset}>Reset</Button>
+          <Button className='bg-primary w-24 h-16' onClick={() => handleSaveOptions(repository.title)}>Save</Button>
         </div>
       </div>
     </div>
