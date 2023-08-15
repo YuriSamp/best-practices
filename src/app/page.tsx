@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 export default function Home() {
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-[#f5f3f1] px-96 ">
-      <header className='flex justify-between items-center my-5 w-full'>
+    <main className="flex min-h-screen flex-col items-center sm:px-14 lg:px-40 xl:px-64 2xl:px-80 ">
+      <header className='flex justify-between items-center mt-5 pb-5 w-full border-b border-neutral-700'>
         <div className='flex items-center gap-3'>
           <AiOutlineTool className='w-6 h-6' />
           <h3 className='text-xl'>Best-pratices</h3>
@@ -16,10 +16,16 @@ export default function Home() {
         <nav>
           <ul className='flex items-center gap-5'>
             <li>
-              <Link href={'/prices'}>Prices</Link>
+              <Link href={'/prices'}>
+                <Button className='text-foreground text-base' variant='link'>Prices</Button>
+              </Link>
             </li>
             <li>
-              <Link className='p-3 rounded-lg bg-black text-white ' href={'#'}>Log in</Link>
+              <Link href={'#'}>
+                <Button className='bg-primary'>
+                  Log in
+                </Button>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -38,7 +44,7 @@ export default function Home() {
       </div>
       <section className='my-10'>
         <Link href={'/auth'}>
-          <Button>
+          <Button className='bg-primary'>
             Get Started
           </Button>
         </Link>

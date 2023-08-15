@@ -61,7 +61,7 @@ const Dashboard = () => {
         repoSelect={repoSelect}
         setRepoSelected={setRepoSelected}
       />
-      <section className='w-full h-full'>
+      <section className='w-full min-h-screen'>
         <ToastContainer
           position='top-center'
           theme='dark'
@@ -71,7 +71,9 @@ const Dashboard = () => {
             repository={repoSelect}
           />
           :
-          <span className='text-4xl'>Select a project to add some rules</span>
+          <div className='w-full h-full flex items-center justify-center'>
+            <span className='text-4xl'>Select a project to add some rules</span>
+          </div>
         }
       </section>
     </main>
