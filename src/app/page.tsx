@@ -49,20 +49,19 @@ export default function Home() {
           </Button>
         </Link>
       </section>
-      <section className='my-10'>
+      <section className='py-10'>
+        <h2 className='text-center text-3xl py-3'>The most dead-simple tool to improve your pull request</h2>
         <div className='my-5 flex justify-between gap-10' >
-          <Image src={PrExample} alt='Pull Request example' width={640} height={440} className='rounded-xl' />
+          <Image src={PrExample} alt='Pull Request example' width={640} className='rounded-xl' />
           <ol className='flex flex-col gap-20 w-80'>
-            <li>
-              <h2 className='text-3xl'>How it works</h2>
-            </li>
+            <li className='text-2xl'>How it works</li>
             <li className='text-xl'>1 install the github app in your repository</li>
-            <li className='text-xl'>2 open a pull request with the code changes</li>
+            <li className='text-xl'>2 Save in dashboard what best-practices you want to keep track</li>
             <li className='text-xl'>3 read the suggested changes and make more changes</li>
           </ol>
         </div>
       </section>
-      <footer className='flex flex-col my-3 w-full '>
+      <footer className='flex flex-col  pt-10 mb-3 w-full '>
         <div className='flex w-full my-5 py-5 border-b'>
           <div className='flex flex-col gap-3'>
             <div className='flex items-center gap-3'>
