@@ -1,19 +1,32 @@
 import useSessionStore from '@/store/useSessionStore'
 import React from 'react'
-import AvatarWithDropdown from './avatarWithDropdonw'
+import { AiOutlineTool } from 'react-icons/ai'
+import { Button } from './ui/button'
+import Link from 'next/link'
 
 const Navbar = () => {
-
-  const { session } = useSessionStore((state) => ({
-    session: state.session,
-  }))
-
   return (
-    <header className='bg-neutral-800 h-20 w-full flex items-center justify-end px-10 z-10 shadow-xl'>
-      <div className='flex items-center gap-3'>
-        <span className='text-white text-xl'>Yuri</span>
-        <AvatarWithDropdown url={session?.user.user_metadata.avatar_url} />
-      </div>
+    <header className='flex justify-between items-center mt-5 pb-5 w-full border-b border-neutral-700'>
+      <Link href={'/'} className='flex items-center gap-3 cursor-pointer'>
+        <AiOutlineTool className='w-6 h-6' />
+        <h3 className='text-xl'>Best-pratices</h3>
+      </Link>
+      <nav>
+        <ul className='flex items-center gap-5'>
+          <li>
+            <Link href={'/prices'}>
+              <Button className='text-foreground text-base' variant='link'>Prices</Button>
+            </Link>
+          </li>
+          <li>
+            <Link href={'/auth'}>
+              <Button className='bg-primary'>
+                Log in
+              </Button>
+            </Link>
+          </li>
+        </ul>
+      </nav>
     </header>
   )
 }

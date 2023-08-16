@@ -10,34 +10,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import Navbar from '@/components/navbar';
 
 
 export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center sm:px-14 lg:px-40 xl:px-64 2xl:px-80 ">
-      <header className='flex justify-between items-center mt-5 pb-5 w-full border-b border-neutral-700'>
-        <div className='flex items-center gap-3'>
-          <AiOutlineTool className='w-6 h-6' />
-          <h3 className='text-xl'>Best-pratices</h3>
-        </div>
-        <nav>
-          <ul className='flex items-center gap-5'>
-            <li>
-              <Link href={'/prices'}>
-                <Button className='text-foreground text-base' variant='link'>Prices</Button>
-              </Link>
-            </li>
-            <li>
-              <Link href={'#'}>
-                <Button className='bg-primary'>
-                  Log in
-                </Button>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <Navbar />
       <div className='w-full mt-20 mb-10'>
         <h1 className='flex flex-col items-center gap-1'>
           <span className='text-6xl'>Pull request with</span>
