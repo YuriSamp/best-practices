@@ -7,6 +7,7 @@ import axios from 'axios'
 import { StripePrice } from '@/types/stripe'
 import { Button } from '@/components/ui/button'
 import Navbar from '@/components/navbar'
+import Footer from '@/components/footer'
 
 const Prices = () => {
 
@@ -35,17 +36,17 @@ const Prices = () => {
 
 
   return (
-    <main className="flex min-h-screen flex-col items-center sm:px-14 lg:px-40 xl:px-64 2xl:px-80">
+    <main className="flex min-h-screen flex-col items-center px-4 sm:px-14 xl:px-80">
       <Navbar />
       <section className='mt-24 flex flex-col items-center justify-center'>
-        <h1 className='text-5xl font-light  pb-5'>Choose your plan</h1>
-        <p className='text-lg'>The first 5 pull requests will be free, no credit card required</p>
+        <h1 className='text-4xl sm:text-5xl font-light  pb-5'>Choose your plan</h1>
+        <p className='text-lg text-center'>The first 5 pull requests will be free, no credit card required</p>
         <div className='flex py-5 gap-4'>
-          <span>Monthly</span>
+          <span>Billed Monthly</span>
           <Switch />
-          <span>Yearly</span>
+          <span>Billed Annually</span>
         </div>
-        <div className='flex gap-10 mt-10'>
+        <div className='flex flex-col lg:flex-row gap-10 mt-10'>
           {prices.map(price => (
             <div className='rounded-lg bg-[#121212] text-white w-80 px-5 py-8 shadow-xl border' key={price.id}>
               <div className='flex flex-col items-center gap-1'>
@@ -84,6 +85,7 @@ const Prices = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   )
 }

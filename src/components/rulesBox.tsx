@@ -56,7 +56,7 @@ const RulesBox = ({ repository }: Props) => {
   }
 
   return (
-    <div className='flex mt-10 mx-14'>
+    <div className='flex justify-center  mt-10 mx-14'>
       <div className='w-1/2 '>
         <h2 className='text-3xl mb-10 text-center'>Rules to choose</h2>
         <div className='w-full flex gap-3'>
@@ -69,8 +69,9 @@ const RulesBox = ({ repository }: Props) => {
               <h2 className='w-full text-xl font-medium h-12 flex items-center'>{principle.category}</h2>
               {principle.bestPractices.map(pratices => (
                 <div key={pratices.id} className=' flex flex-row items-center gap-3'>
-                  <div className='flex gap-3 items-center h-11'>
+                  <div className='flex gap-3 items-center h-20'>
                     <Checkbox
+                      className='border-white'
                       checked={options && !!options.filter(options => options === pratices.name).length}
                       onCheckedChange={() => handleCheck(pratices.name)}
                     />
@@ -95,7 +96,7 @@ const RulesBox = ({ repository }: Props) => {
       <div className='flex flex-col items-center w-1/2'>
         <h2 className='text-3xl mb-10'>Rules selected</h2>
         <div className='h-4/5'>
-          <ul className='flex flex-wrap gap-4 px-10 w-full overflow-y-scroll justify-center items-center'>
+          <ul className='flex flex-wrap gap-4 px-10 w-full max-h-[65vh] overflow-y-scroll justify-center items-center'>
             {options && options.map((pratices, id) => <li className='px-2 py-2 flex items-center bg-[#292524] text-white text-lg rounded-xl' key={id}>{pratices}</li>)}
           </ul>
         </div>
