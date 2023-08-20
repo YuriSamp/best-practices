@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/accordion"
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
+import install from '../../public/install.png'
 
 
 export default function Home() {
@@ -41,7 +42,7 @@ export default function Home() {
       <section className='py-10'>
         <ol className='flex flex-col gap-20 pt-5 px-3 items-center  text-center xl:text-left'>
           <li className='my-5 flex flex-col-reverse xl:flex-row justify-between gap-10 '>
-            <Image src={Dashboard} alt='Pull Request example' width={900} className='rounded-xl border xl:w-[500px] 2xl:w-[640px]' />
+            <Image src={install} alt='Pull Request example' width={900} className='rounded-xl border xl:w-[500px] 2xl:w-[640px]' />
             <div>
               <p className='text-2xl font-bold'>Simplicity in Installing the GitHub App</p>
               <p className='mt-5 text-xl tracking-wide'>Install our GitHub App with just a few clicks. Authorize the permissions and the App will automatically detect the repositories.</p>
@@ -97,7 +98,7 @@ export default function Home() {
               </p>
             </AccordionTrigger>
             <AccordionContent className='text-center sm:text-left text-lg'>
-              American express, Diners Club, Mastercard, Visa, Union pay, Apple pay, Google pay.
+              you will be charged an additional fee for each pull request.
             </AccordionContent>
           </AccordionItem>
         </Accordion>
