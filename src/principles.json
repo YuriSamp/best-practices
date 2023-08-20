@@ -49,27 +49,27 @@
     "id": 3,
     "bestPractices": [
       {
-        "name": "Single Responsibility Principle (SRP)",
+        "name": "Single Responsibility Principle",
         "id": 7,
         "description": "The SRP states that a class or module should have only one reason to change, promoting maintainability and reducing coupling between components."
       },
       {
-        "name": "Open/Closed Principle (OCP)",
+        "name": "Open/Closed Principle",
         "id": 8,
         "description": "The OCP states that software entities (classes, modules, functions) should be open for extension but closed for modification, encouraging the use of interfaces and abstract classes."
       },
       {
-        "name": "Liskov Substitution Principle (LSP)",
+        "name": "Liskov Substitution Principle",
         "id": 9,
         "description": "The LSP states that objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program, preserving the expected behavior."
       },
       {
-        "name": "Interface Segregation Principle (ISP)",
+        "name": "Interface Segregation Principle",
         "id": 10,
         "description": "The ISP states that clients should not be forced to depend on interfaces they do not use, promoting smaller and more focused interfaces."
       },
       {
-        "name": "Dependency Inversion Principle (DIP)",
+        "name": "Dependency Inversion Principle",
         "id": 11,
         "description": "The DIP states that high-level modules should not depend on low-level modules but both should depend on abstractions, promoting decoupling and flexibility."
       }
