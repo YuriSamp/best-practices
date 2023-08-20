@@ -68,7 +68,7 @@ const RulesBox = ({ repository }: Props) => {
                 <div key={pratices.id} className={`flex flex-row items-center my-3 w-full`}>
                   <div className='flex gap-3 items-center h-20'>
                     <Checkbox
-                      className='border-white'
+                      className={`${options.filter(options => options === pratices.name).length ? 'border-primary' : 'border-white'}`}
                       checked={options && !!options.filter(options => options === pratices.name).length}
                       onCheckedChange={() => handleCheck(pratices.name)}
                     />
