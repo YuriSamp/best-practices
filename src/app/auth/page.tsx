@@ -21,12 +21,12 @@ const Auth = () => {
 
   return (
     <main className='w-full min-h-screen flex justify-center items-center'>
-      <div className='flex flex-col justify-center items-center gap-3'>
-        <div className='bg-[#202020] flex flex-col items-center justify-center gap-5 px-20 pt-12 pb-8 rounded-lg'>
-          <h1 className='text-2xl'>Sign In to Best-Practices</h1>
-          <span className='text-sm'>Boost your pr to never miss best-practices again</span>
-          <div className='my-5'>
-            <Button onClick={signInWithGitHub} className='bg-primary text-primary-foreground w-80 h-10 flex gap-3'>
+      <div className='flex flex-col justify-center items-center gap-3 mx-5'>
+        <div className='bg-[#202020] flex flex-col items-center justify-center gap-5 px-5 sm:px-12 pt-12 pb-8 rounded-lg'>
+          <h1 className='text-2xl text-center'>Best-Practices</h1>
+          <span className='text-sm text-center'>Boost your pr to never miss best-practices again</span>
+          <div className='my-5 w-full'>
+            <Button onClick={signInWithGitHub} className='bg-primary text-primary-foreground w-full h-10 flex gap-3'>
               <Github />
               Continue with Github
             </Button>
