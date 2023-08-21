@@ -72,6 +72,7 @@ export async function POST(request: Request) {
         .select()
 
       if (error) {
+        console.log(error.message)
         return new Response(error.message, {
           status: 500,
         })
