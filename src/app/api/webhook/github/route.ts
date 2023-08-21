@@ -32,32 +32,48 @@ export async function POST(request: Request) {
   if (eventType === 'installation_repositories') {
     const event = await request.json()
     if (event.action === 'added') {
+      const projects: {
+        user: string
+        title: string
+      }[] = []
       event.repositories_added.forEach((repository: repo) => {
-        console.log(repository)
+        const project = {
+          user: event.sender.login,
+          title: repository.name,
+          repository_id: repository.id,
+        }
+        projects.push(project)
       })
 
-      //Depois eu tenho que iterar caso o usuário queira adicionar x repos
-      const projectObj = {
-        user: event.sender.login,
-        title: event.repositories_added.at(0).name,
-      }
-
-      const { error } = await supabase.from('Projects').insert(projectObj)
+      const { error } = await supabase.from('Projects').insert(projects)
 
       if (error) {
         return new Response(error.message, {
-          status: 200,
+          status: 500,
         })
       }
+
       return new Response(null, {
         status: 200,
       })
     }
 
     if (event.action === 'removed') {
+      const repositoriesIds: number[] = []
       event.repositories_removed.forEach((repository: repo) => {
-        console.log(repository)
+        repositoriesIds.push(repository.id)
       })
+
+      const { error } = await supabase
+        .from('Projects')
+        .delete()
+        .eq('repository_id', repositoriesIds)
+
+      if (error) {
+        return new Response(error.message, {
+          status: 500,
+        })
+      }
 
       return new Response(null, {
         status: 200,

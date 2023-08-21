@@ -50,6 +50,7 @@ export interface Database {
         Row: {
           created_at: string
           id: number
+          repository_id: number | null
           rules: string[] | null
           title: string
           updated_at: string | null
@@ -58,6 +59,7 @@ export interface Database {
         Insert: {
           created_at?: string
           id?: number
+          repository_id?: number | null
           rules?: string[] | null
           title: string
           updated_at?: string | null
@@ -66,6 +68,7 @@ export interface Database {
         Update: {
           created_at?: string
           id?: number
+          repository_id?: number | null
           rules?: string[] | null
           title?: string
           updated_at?: string | null
