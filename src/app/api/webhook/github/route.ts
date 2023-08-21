@@ -1,13 +1,18 @@
-import type {
-  InstallationEvent,
-  PullRequestEvent,
-} from '@octokit/webhooks-types'
+import type { PullRequestEvent } from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import { getGithubClient } from '@/server/getGithubClient'
 import { commentOnPr } from './commentOnPr'
 import { BASE_LIMIT_EXCEEDED } from './prCommentTemplates'
 import { isValidFileExtension } from './FileExtensionsValidator'
+
+type repo = {
+  id: number
+  node_id: string
+  name: string
+  full_name: string
+  private: boolean
+}
 
 export async function POST(request: Request) {
   const eventType = request.headers.get('x-github-event')
@@ -26,8 +31,11 @@ export async function POST(request: Request) {
 
   if (eventType === 'installation_repositories') {
     const event = await request.json()
-    console.log(event)
     if (event.action === 'added') {
+      event.repositories_added.forEach((repository: repo) => {
+        console.log(repository)
+      })
+
       //Depois eu tenho que iterar caso o usuário queira adicionar x repos
       const projectObj = {
         user: event.sender.login,
@@ -41,11 +49,20 @@ export async function POST(request: Request) {
           status: 200,
         })
       }
+      return new Response(null, {
+        status: 200,
+      })
     }
 
-    return new Response(null, {
-      status: 200,
-    })
+    if (event.action === 'removed') {
+      event.repositories_removed.forEach((repository: repo) => {
+        console.log(repository)
+      })
+
+      return new Response(null, {
+        status: 200,
+      })
+    }
   }
 
   const event: PullRequestEvent = await request.json()
