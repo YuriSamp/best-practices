@@ -26,6 +26,7 @@ export async function POST(request: Request) {
 
   if (eventType === 'installation_repositories') {
     const event = await request.json()
+    console.log(event)
     if (event.action === 'added') {
       //Depois eu tenho que iterar caso o usuário queira adicionar x repos
       const projectObj = {
