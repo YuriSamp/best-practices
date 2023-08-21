@@ -65,10 +65,12 @@ export async function POST(request: Request) {
         repositoriesIds.push(repository.id)
       })
 
+      const ids = [...repositoriesIds] as const
+
       const { data, error } = await supabase
         .from('Projects')
         .delete()
-        .eq('repository_id', repositoriesIds)
+        .eq('repository_id', ids)
         .select()
 
       if (error) {
