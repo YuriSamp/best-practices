@@ -6,7 +6,7 @@ import Sidebar from '@/components/sidebar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useSessionStore from '@/store/useSessionStore'
-import { getSupabaseClietSide } from '@/lib/supabase'
+import axios from 'axios';
 
 type Repository = {
   rules: null | string[]
@@ -15,8 +15,6 @@ type Repository = {
 }
 
 const Dashboard = () => {
-
-  const supabase = getSupabaseClietSide()
   const [projects, setProjects] = useState<Repository[]>([])
   const [repoSelect, setRepoSelected] = useState<Repository | null>()
 
@@ -27,26 +25,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     (async function GetRepositories() {
-      const { data } = await supabase.auth.getUser()
+      const { data, status } = await axios.get('/api/repositories')
 
-      const { data: repos, error } = await supabase
-        .from('Projects')
-        .select()
-        .eq('user', data.user?.user_metadata.user_name)
-
-      if (error) {
+      if (status !== 200) {
         toast.error('Não foi possivel pegar os repositorios')
         return
       }
 
-      setProjects(repos)
+      setProjects(data)
     })()
-    fetchUsers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
   useEffect(() => {
+    fetchUsers()
     if (error) {
       toast.error('Não foi possivel pegar o usuário')
     }
