@@ -80,7 +80,7 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
                 <AvatarImage src={session?.user.user_metadata.avatar_url} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <span className='text-white text-xl'>Yuri</span>
+              <span className='text-white text-xl'>{session?.user.user_metadata.preferred_username}</span>
             </div>
 
             <DropdownMenu>

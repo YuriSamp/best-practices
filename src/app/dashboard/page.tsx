@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import RulesBox from '@/components/rulesBox'
 import Sidebar from '@/components/sidebar'
-import Navbar from '@/components/navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useSessionStore from '@/store/useSessionStore'

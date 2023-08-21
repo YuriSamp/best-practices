@@ -33,7 +33,7 @@ export default function Home() {
         </h3>
       </div>
       <section className='my-8 flex flex-col items-center'>
-        <Link href={'/auth'}>
+        <Link href={'/api/auth'}>
           <Button className='bg-primary'>
             Get Started
           </Button>

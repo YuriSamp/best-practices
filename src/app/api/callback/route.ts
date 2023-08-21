@@ -10,14 +10,6 @@ export async function GET(req: NextRequest) {
 
   if (code) {
     const { data } = await supabase.auth.exchangeCodeForSession(code)
-    const { data: UserId } = await supabase.from('Users').select('user_uid')
-
-    if (
-      data.user?.id &&
-      !!UserId?.filter((user) => user.user_uid === data.user?.id)
-    ) {
-      return NextResponse.redirect(new URL('/dashboard', req.url))
-    }
 
     const userObj = {
       user_uid: data.user?.id || '',
@@ -30,11 +22,11 @@ export async function GET(req: NextRequest) {
 
     if (error) {
       console.log(error)
-      return NextResponse.redirect(new URL('/', req.url))
+      return NextResponse.redirect(new URL('/auth', req.url))
     }
 
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  return NextResponse.redirect(new URL('/', req.url))
+  return NextResponse.redirect(new URL('/auth', req.url))
 }
