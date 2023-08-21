@@ -64,16 +64,19 @@ export async function POST(request: Request) {
         repositoriesIds.push(repository.id)
       })
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('Projects')
         .delete()
         .eq('repository_id', repositoriesIds)
+        .select()
 
       if (error) {
         return new Response(error.message, {
           status: 500,
         })
       }
+
+      console.log('eu removi esses repositorios', data)
 
       return new Response(null, {
         status: 200,
