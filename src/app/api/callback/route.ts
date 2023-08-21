@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
     const { error } = await supabase.from('Users').insert(userObj)
 
     if (error) {
+      console.log(error)
       return NextResponse.redirect(new URL('/', req.url))
     }
 

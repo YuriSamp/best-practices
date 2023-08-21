@@ -9,6 +9,7 @@ import { Github } from 'lucide-react'
 const prodUrl = 'https://prcheker.vercel.app/api/callback'
 
 const Auth = () => {
+  // console.log(prodUrl)
   const supabase = getSupabaseClietSide()
 
   async function signInWithGitHub() {
