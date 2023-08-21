@@ -1,5 +1,6 @@
+'use client'
+
 import Link from 'next/link';
-import { AiOutlineTool } from 'react-icons/ai'
 import PrExample from '../../public/pr.png'
 import Dashboard from '../../public/dashboard.png'
 import Image from 'next/image';
@@ -13,9 +14,27 @@ import {
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import install from '../../public/install.png'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
 
 
 export default function Home() {
+
+  const [authUrl, setAuthUrl] = useState('')
+
+  useEffect(() => {
+    (async () => {
+      const supabase = createClientComponentClient()
+      const user = await supabase.auth.getUser()
+
+      if (user.data) {
+        setAuthUrl('/dashboard')
+        return
+      }
+      setAuthUrl('/auth')
+    })()
+  }, [])
+
 
   return (
     <main className="flex min-h-screen flex-col items-center sm:px-14 lg:px-40 xl:px-64 2xl:px-80 ">
@@ -33,7 +52,7 @@ export default function Home() {
         </h3>
       </div>
       <section className='my-8 flex flex-col items-center'>
-        <Link href={'/api/auth'}>
+        <Link href={authUrl}>
           <Button className='bg-primary'>
             Get Started
           </Button>
