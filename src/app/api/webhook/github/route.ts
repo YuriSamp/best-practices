@@ -58,6 +58,7 @@ export async function POST(request: Request) {
       })
     }
 
+    console.log(event.action)
     if (event.action === 'removed') {
       const repositoriesIds: number[] = []
       event.repositories_removed.forEach((repository: repo) => {
