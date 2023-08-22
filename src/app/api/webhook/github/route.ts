@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       const { data, error } = await supabase
         .from('Projects')
         .delete()
-        .filter('repository_id', 'in', `${repositoriesIds.join(' ')}`)
+        .filter('repository_id', 'in', `(${repositoriesIds.join(' ')})`)
         .select()
 
       if (error) {
