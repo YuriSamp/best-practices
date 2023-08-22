@@ -58,7 +58,6 @@ export async function POST(request: Request) {
       })
     }
 
-    console.log(event.action)
     if (event.action === 'removed') {
       const repositoriesIds: number[] = []
       event.repositories_removed.forEach((repository: repo) => {
@@ -70,7 +69,7 @@ export async function POST(request: Request) {
       const { data, error } = await supabase
         .from('Projects')
         .delete()
-        .eq('repository_id', ids)
+        .filter('repository_id', 'in', ids)
         .select()
 
       if (error) {
