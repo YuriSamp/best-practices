@@ -1,10 +1,8 @@
 'use client'
 
-import React, { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { getSupabaseClietSide } from '@/lib/supabase'
 import { Github } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
 const devUrl = 'http://localhost:3000/api/callback'
 // const prodUrl = 'https://prcheker.vercel.app/api/callback'
@@ -12,17 +10,7 @@ const devUrl = 'http://localhost:3000/api/callback'
 const Auth = () => {
   // console.log(prodUrl)
   const supabase = getSupabaseClietSide()
-  const router = useRouter()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const user = await supabase.auth.getUser()
-      if (user.data) {
-        router.push('/dashboard')
-      }
-    }
-    getUser()
-  }, [])
 
   async function signInWithGitHub() {
     await supabase.auth.signInWithOAuth({

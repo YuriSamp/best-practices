@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { toast } from 'react-toastify'
+import { getSupabaseClietSide } from '@/lib/supabase'
 
 
 type Repository = {
@@ -29,6 +31,8 @@ interface SidebarProps {
 
 const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
   const router = useRouter()
+  const supabase = getSupabaseClietSide()
+
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
@@ -47,6 +51,16 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
   const { session } = useSessionStore((state) => ({
     session: state.session,
   }))
+
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      toast.error("Aconteceu um erro, tente novamente mais tarde")
+      return
+    }
+    router.push('/auth')
+  }
 
   return (
     <aside className='relative'>
@@ -95,13 +109,12 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='flex gap-1 cursor-pointer'>
+                <DropdownMenuItem className='flex gap-1 cursor-pointer' onClick={signOut}>
                   <LogOut className='w-5 h-5' />
                   Log Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
           </div>
         </div>
         :
