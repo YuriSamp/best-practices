@@ -117,6 +117,30 @@ export async function POST(request: Request) {
     })
   }
 
+  if (user) {
+    const { data: logs } = await supabase
+      .from('Logs')
+      .select()
+      .eq('user_id', user?.user_uid)
+
+    if (logs && logs?.length >= 5) {
+      const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
+        '$USER',
+        event.repository.owner.login
+      )
+
+      const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
+
+      if (error) {
+        throw Error(error.message)
+      }
+
+      return new Response(null, {
+        status: 200,
+      })
+    }
+  }
+
   const repository = data
     .filter((repository) => repository.title === event.repository.name)
     .at(0)
@@ -148,39 +172,17 @@ export async function POST(request: Request) {
       throw Error('Fail on get Gpt analysis')
     }
 
-    if (user?.tokens && user?.tokens > tokens) {
-      const { error } = await commentOnPr(content, event)
+    const { error } = await commentOnPr(content, event)
 
-      if (error) {
-        throw Error(error.message)
-      }
-
-      await supabase
-        .from('Logs')
-        .insert({
-          project_id: repository?.id as number,
-          token_count: tokens,
-          user_id: user?.user_uid as string,
-        })
-        .select()
-
-      const { error: updateError } = await supabase
-        .from('Users')
-        .update({ tokens: user.tokens - tokens })
-        .eq('user_uid', user?.user_uid as string)
-
-      console.log(updateError)
-    } else {
-      const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
-        '$USER',
-        event.repository.owner.login
-      )
-
-      const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
-      if (error) {
-        throw Error(error.message)
-      }
+    if (error) {
+      throw Error(error.message)
     }
+
+    await supabase.from('Logs').insert({
+      project_id: repository?.id as number,
+      token_count: tokens,
+      user_id: user?.user_uid as string,
+    })
   } catch (error: any) {
     console.log(error.message)
     return new Response(error.message, {
