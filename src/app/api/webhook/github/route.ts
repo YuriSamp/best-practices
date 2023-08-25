@@ -90,6 +90,8 @@ export async function POST(request: Request) {
     })
   }
 
+  console.log('Reabri o pr')
+
   const { data, error } = await supabase
     .from('Projects')
     .select()
