@@ -3,7 +3,7 @@ export const BASE_LIMIT_EXCEEDED = `
 
 🚀 **Supercharge Your Workflow with Our App!** 🚀
 
-We've noticed your enthusiasm for collaboration! 🌟 However, our free plan offers up to 5 pull requests, and it seems you've reached that limit. But don't worry – we've got an exciting solution for you!
+We've noticed your enthusiasm for collaboration! 🌟 However, our free plan offers up to 5000 tokens, and it seems you've reached that limit. But don't worry – we've got an exciting solution for you!
 
 🔥 **Upgrade to Our Premium Plan for Limitless Potential!** 🔥
 

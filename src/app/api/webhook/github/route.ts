@@ -117,40 +117,6 @@ export async function POST(request: Request) {
     })
   }
 
-  if (user) {
-    const { data: logs, error: logsError } = await supabase
-      .from('Logs')
-      .select()
-      .eq('user_id', user?.user_uid)
-
-    if (logsError) {
-      console.log(logsError.message)
-      return new Response(logsError.message, {
-        status: 500,
-      })
-    }
-
-    if (logs && logs?.length >= 5) {
-      const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
-        '$USER',
-        event.repository.owner.login
-      )
-
-      const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
-
-      if (error) {
-        console.log(error.message)
-        return new Response(error.message, {
-          status: 500,
-        })
-      }
-
-      return new Response(null, {
-        status: 200,
-      })
-    }
-  }
-
   const repository = data
     .filter((repository) => repository.title === event.repository.name)
     .at(0)
@@ -182,21 +148,37 @@ export async function POST(request: Request) {
       throw Error('Fail on get Gpt analysis')
     }
 
-    const { error } = await commentOnPr(content, event)
+    if (user?.tokens && user?.tokens > tokens) {
+      const { error } = await commentOnPr(content, event)
 
-    if (error) {
-      throw Error(error.message)
+      if (error) {
+        throw Error(error.message)
+      }
+
+      await supabase
+        .from('Logs')
+        .insert({
+          project_id: repository?.id as number,
+          token_count: tokens,
+          user_id: user?.user_uid as string,
+        })
+        .select()
+
+      await supabase
+        .from('Users')
+        .update({ tokens: user.tokens - tokens })
+        .eq('user_uid', user?.user_uid as string)
+    } else {
+      const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
+        '$USER',
+        event.repository.owner.login
+      )
+
+      const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
+      if (error) {
+        throw Error(error.message)
+      }
     }
-
-    const { data, error: LogsError } = await supabase
-      .from('Logs')
-      .insert({
-        project_id: repository?.id as number,
-        token_count: tokens,
-        user_id: user?.user_uid as string,
-      })
-      .select()
-    console.log({ data, LogsError })
   } catch (error: any) {
     console.log(error.message)
     return new Response(error.message, {
