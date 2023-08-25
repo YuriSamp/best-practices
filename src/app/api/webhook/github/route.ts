@@ -103,6 +103,8 @@ export async function POST(request: Request) {
     })
   }
 
+  console.log({ user: data[0].user })
+
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
     .select()
