@@ -164,10 +164,12 @@ export async function POST(request: Request) {
         })
         .select()
 
-      await supabase
+      const { error: updateError } = await supabase
         .from('Users')
         .update({ tokens: user.tokens - tokens })
         .eq('user_uid', user?.user_uid as string)
+
+      console.log(updateError)
     } else {
       const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
         '$USER',
