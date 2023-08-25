@@ -90,8 +90,6 @@ export async function POST(request: Request) {
     })
   }
 
-  console.log('Reabri o pr')
-
   const { data, error } = await supabase
     .from('Projects')
     .select()
@@ -119,10 +117,17 @@ export async function POST(request: Request) {
   }
 
   if (user) {
-    const { data: logs } = await supabase
+    const { data: logs, error: logsError } = await supabase
       .from('Logs')
       .select()
       .eq('user_id', user?.user_uid)
+
+    if (logsError) {
+      console.log(logsError.message)
+      return new Response(logsError.message, {
+        status: 500,
+      })
+    }
 
     if (logs && logs?.length >= 5) {
       const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
@@ -133,7 +138,10 @@ export async function POST(request: Request) {
       const { error } = await commentOnPr(LIMIT_EXCEEDED, event)
 
       if (error) {
-        throw Error(error.message)
+        console.log(error.message)
+        return new Response(error.message, {
+          status: 500,
+        })
       }
 
       return new Response(null, {
