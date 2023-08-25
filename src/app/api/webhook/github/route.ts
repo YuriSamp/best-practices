@@ -103,8 +103,6 @@ export async function POST(request: Request) {
     })
   }
 
-  console.log({ user: data[0].user })
-
   const { data: userData, error: retriveUserError } = await supabase
     .from('Users')
     .select()
@@ -190,11 +188,15 @@ export async function POST(request: Request) {
       throw Error(error.message)
     }
 
-    await supabase.from('Logs').insert({
-      project_id: repository?.id as number,
-      token_count: tokens,
-      user_id: user?.user_uid as string,
-    })
+    const { data, error: LogsError } = await supabase
+      .from('Logs')
+      .insert({
+        project_id: repository?.id as number,
+        token_count: tokens,
+        user_id: user?.user_uid as string,
+      })
+      .select()
+    console.log({ data, LogsError })
   } catch (error: any) {
     console.log(error.message)
     return new Response(error.message, {
