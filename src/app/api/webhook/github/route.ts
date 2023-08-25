@@ -110,6 +110,7 @@ export async function POST(request: Request) {
   const user = userData?.at(0)
 
   if (retriveUserError) {
+    console.log(retriveUserError)
     return new Response(retriveUserError.message, {
       status: 500,
     })
@@ -182,6 +183,7 @@ export async function POST(request: Request) {
       user_id: user?.user_uid as string,
     })
   } catch (error: any) {
+    console.log(error.message)
     return new Response(error.message, {
       status: 500,
     })
