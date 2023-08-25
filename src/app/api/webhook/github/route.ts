@@ -48,6 +48,7 @@ export async function POST(request: Request) {
       const { error } = await supabase.from('Projects').insert(projects)
 
       if (error) {
+        console.log(error.message)
         return new Response(error.message, {
           status: 500,
         })
