@@ -1,10 +1,6 @@
-'use client'
-
-import React, { useState } from 'react'
 import { AiOutlineTool } from 'react-icons/ai'
 import { Button } from './ui/button'
 import Link from 'next/link'
-import { Menu } from 'lucide-react'
 
 const Navbar = () => {
 
