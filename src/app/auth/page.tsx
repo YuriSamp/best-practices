@@ -9,7 +9,6 @@ const CALLBACK_URL = process.env.NEXT_PUBLIC_CALLBACK_URL || 'http://localhost:3
 const Auth = () => {
   const supabase = getSupabaseClietSide()
 
-  console.log({ CALLBACK_URL, envCallbakck: process.env.CALLBACK_URL })
   async function signInWithGitHub() {
     await supabase.auth.signInWithOAuth({
       provider: 'github',
