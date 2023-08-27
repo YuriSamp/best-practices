@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { getSupabaseClietSide } from '@/lib/supabase'
 import { Github } from 'lucide-react'
 
-const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:3000/api/callback'
+const CALLBACK_URL = process.env.NEXT_PUBLIC_CALLBACK_URL || 'http://localhost:3000/api/callback'
 
 const Auth = () => {
   const supabase = getSupabaseClietSide()
