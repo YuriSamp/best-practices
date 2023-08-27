@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Prchecker',
   description: 'A cutting-edge tool that tirelessly monitors, identifies, and delivers a myriad of enhancements',
