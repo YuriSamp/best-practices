@@ -4,7 +4,6 @@ import { Checkbox } from './ui/checkbox'
 import { Button } from './ui/button'
 import { toast } from 'react-toastify';
 import { getSupabaseClietSide } from '@/lib/supabase'
-import { Input } from './ui/input';
 import { Info } from 'lucide-react'
 import {
   Tooltip,
@@ -57,9 +56,8 @@ const RulesBox = ({ repository }: Props) => {
 
   return (
     <div className='flex justify-center mt-10 mx-5 '>
-      <div className='min-w-[280px] sm:w-[400px] md:w-[600px] xl:w-[900px] '>
+      <div className='min-w-[280px] sm:w-[400px] md:w-[600px] xl:w-[900px] mt-12 '>
         <h2 className='text-2xl sm:text-3xl mb-10 text-center'>Search a practice</h2>
-        <Input className='bg-background focus:ring-transparent border rounded-lg' />
         <ul className='max-h-[63vh] self-start overflow-scroll overflow-x-hidden mt-10'>
           {principles.map(principle => (
             <div className='pb-5 mb-5 border-b last:border-0 border-neutral-400 w-full' key={principle.id}>
