@@ -2,9 +2,7 @@ import { stripe } from '@/lib/stripe'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import Stripe from 'stripe'
 
-const webhookSecret =
-  process.env.STRIPE_PAYMENT_WEBHOOK_SECRET ||
-  process.env.STRIPE_PAYMENT_WEBHOOK_LOCAL_SECRET
+const webhookSecret = process.env.STRIPE_PAYMENT_WEBHOOK_SECRET
 
 const handleTier = (price: number) => {
   let tokens = 0

@@ -32,8 +32,6 @@ interface SidebarProps {
 const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
   const router = useRouter()
   const supabase = getSupabaseClietSide()
-
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   const handleSelectRepo = (repo: string) => {
