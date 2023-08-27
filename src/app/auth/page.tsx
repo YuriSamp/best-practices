@@ -4,19 +4,16 @@ import { Button } from '@/components/ui/button'
 import { getSupabaseClietSide } from '@/lib/supabase'
 import { Github } from 'lucide-react'
 
-const devUrl = 'http://localhost:3000/api/callback'
-// const prodUrl = 'https://prcheker.vercel.app/api/callback'
+const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:3000/api/callback'
 
 const Auth = () => {
-  // console.log(prodUrl)
   const supabase = getSupabaseClietSide()
-
 
   async function signInWithGitHub() {
     await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: devUrl,
+        redirectTo: CALLBACK_URL,
       }
     })
   }
