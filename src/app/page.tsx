@@ -37,8 +37,6 @@ export default function Home() {
     })()
   }, [])
 
-  console.log(authUrl)
-
 
   return (
     <main className="flex min-h-screen flex-col items-center sm:px-14 lg:px-40 xl:px-64 2xl:px-80 ">
