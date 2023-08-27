@@ -4,11 +4,12 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
-  const supabase = createRouteHandlerClient<Database>({ cookies })
   const { searchParams } = new URL(req.url)
   const code = searchParams.get('code')
 
   if (code) {
+    console.log(cookies)
+    const supabase = createRouteHandlerClient<Database>({ cookies })
     const { data } = await supabase.auth.exchangeCodeForSession(code)
     const { data: UserId } = await supabase.from('Users').select('user_uid')
 
@@ -18,7 +19,6 @@ export async function GET(req: NextRequest) {
     ) {
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
-
     const userObj = {
       user_uid: data.user?.id || '',
       email: data.user?.email || '',
