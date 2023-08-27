@@ -8,14 +8,13 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get('code')
 
   if (code) {
-    console.log({ cookies: cookies() })
     const supabase = createRouteHandlerClient<Database>({ cookies })
     const { data } = await supabase.auth.exchangeCodeForSession(code)
     const { data: UserId } = await supabase.from('Users').select('user_uid')
 
     if (
       data.user?.id &&
-      !!UserId?.filter((user) => user.user_uid === data.user?.id)
+      UserId?.filter((user) => user.user_uid === data.user?.id).length
     ) {
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }

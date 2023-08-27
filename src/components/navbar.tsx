@@ -1,8 +1,30 @@
+'use client'
+
 import { AiOutlineTool } from 'react-icons/ai'
 import { Button } from './ui/button'
 import Link from 'next/link'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useEffect, useState } from 'react'
 
 const Navbar = () => {
+
+  const [authUrl, setAuthUrl] = useState('')
+
+  useEffect(() => {
+    (async () => {
+      const supabase = createClientComponentClient()
+
+      const response = await supabase.auth.getUser()
+      if (!response.error) {
+        setAuthUrl('/dashboard')
+        return
+      }
+
+      setAuthUrl('/auth')
+
+    })()
+  }, [])
+
 
   return (
     <header className='flex justify-between items-center mt-5 pb-5 mb-3 w-full border-b border-neutral-700 px-3'>
@@ -18,7 +40,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href={'/auth'}>
+            <Link href={authUrl}>
               <Button className='bg-primary'>
                 Log in
               </Button>
