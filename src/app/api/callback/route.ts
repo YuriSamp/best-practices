@@ -10,12 +10,12 @@ export async function GET(req: NextRequest) {
   if (code) {
     const supabase = createRouteHandlerClient<Database>({ cookies })
     const { data } = await supabase.auth.exchangeCodeForSession(code)
-    const { data: UserId } = await supabase.from('Users').select('user_uid')
+    const { data: user } = await supabase
+      .from('Users')
+      .select()
+      .eq('user_uid', data?.user?.id)
 
-    if (
-      data.user?.id &&
-      UserId?.filter((user) => user.user_uid === data.user?.id).length
-    ) {
+    if (data.user?.id && user?.at(0)?.user_uid) {
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
     const userObj = {
