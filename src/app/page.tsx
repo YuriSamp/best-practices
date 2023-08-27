@@ -25,15 +25,19 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const supabase = createClientComponentClient()
-      const user = await supabase.auth.getUser()
 
-      if (user.data) {
+      const response = await supabase.auth.getUser()
+      if (!response.error) {
         setAuthUrl('/dashboard')
         return
       }
+
       setAuthUrl('/auth')
+
     })()
   }, [])
+
+  console.log(authUrl)
 
 
   return (
