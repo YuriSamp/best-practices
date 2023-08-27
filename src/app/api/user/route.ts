@@ -10,17 +10,24 @@ export async function GET() {
     .from('Logs')
     .select()
     .eq('user_id', data.user?.id)
-  const { data: userTokens } = await supabase
+  const { data: user } = await supabase
     .from('Users')
     .select()
     .eq('user_uid', data.user?.id)
 
-  const tokens_used =
+  const tokensUsed =
     logs?.map((log) => log.token_count).reduce((a, b) => a + b) || 0
 
-  const maxTokens = userTokens?.at(0)?.tokens || 0
+  const maxTokens = user?.at(0)?.tokens || 0
 
-  return new Response(JSON.stringify({ tokens_used, maxTokens }), {
-    status: 200,
-  })
+  return new Response(
+    JSON.stringify({
+      tokensUsed,
+      maxTokens,
+      freeTier: !user?.at(0)?.stripe_customer_id,
+    }),
+    {
+      status: 200,
+    }
+  )
 }

@@ -10,13 +10,15 @@ import { toast } from 'react-toastify'
 import { Button } from '@/components/ui/button'
 
 type ApiReturn = {
-  tokens_used: number
+  tokensUsed: number
   maxTokens: number
+  freeTier: boolean
 }
 
 const Account = () => {
   const [tokensUsed, setTokensUsed] = useState(0)
   const [maxTokens, setMaxTokens] = useState(0)
+  const [freeTier, setFreeTier] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -27,8 +29,9 @@ const Account = () => {
         toast.error('Não foi possivel pegar os repositorios')
         return
       }
+      setFreeTier(data.freeTier)
       setMaxTokens(data.maxTokens)
-      setTokensUsed(data.tokens_used)
+      setTokensUsed(data.tokensUsed)
     })()
   }, [])
 
@@ -52,7 +55,7 @@ const Account = () => {
             <span className='sm:text-2xl'>{maxTokens}</span>
           </div>
         </div>
-        <Button className='bg-primary' onClick={updateFreeTier}>Update your free tier</Button>
+        {freeTier && <Button className='bg-primary' onClick={updateFreeTier}>Update your free tier</Button>}
       </div>
     </main>
   )

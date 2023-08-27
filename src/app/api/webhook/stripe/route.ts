@@ -2,8 +2,9 @@ import { stripe } from '@/lib/stripe'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import Stripe from 'stripe'
 
-const webhookSecret = process.env.STRIPE_PAYMENT_WEBHOOK_SECRET
-const localSecret = process.env.STRIPE_PAYMENT_WEBHOOK_LOCAL_SECRET
+const webhookSecret =
+  process.env.STRIPE_PAYMENT_WEBHOOK_SECRET ||
+  process.env.STRIPE_PAYMENT_WEBHOOK_LOCAL_SECRET
 
 const handleTier = (price: number) => {
   let tokens = 0
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      localSecret as string
+      webhookSecret as string
     )
   } catch (error: any) {
     return new Response(`Webhook Error: ${error.message}`, { status: 400 })
