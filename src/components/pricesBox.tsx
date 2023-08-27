@@ -1,8 +1,6 @@
 'use client'
 
 import React from 'react'
-
-import { useState, useEffect } from 'react'
 import { Leaf, Check } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import axios from 'axios'
@@ -23,8 +21,6 @@ const PricesBox = ({ prices }: { prices: StripePrice[] }) => {
     )
     window.location.assign(data)
   }
-
-
 
   return (
     <section className='mt-24 flex flex-col items-center justify-center'>
