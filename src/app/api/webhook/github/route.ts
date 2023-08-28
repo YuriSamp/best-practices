@@ -2,8 +2,8 @@ import type { PullRequestEvent } from '@octokit/webhooks-types'
 import { gptAnalysisResult } from './gptAnalysis'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import { getGithubClient } from '@/server/getGithubClient'
-import { commentOnPr } from './commentOnPr'
-import { BASE_LIMIT_EXCEEDED } from './prCommentTemplates'
+import { commentOnPr, updateCommentOnPr } from './commentOnPr'
+import { BASE_LIMIT_EXCEEDED, LOADING_COMMENT } from './prCommentTemplates'
 import { isValidFileExtension } from './FileExtensionsValidator'
 
 type repo = {
@@ -151,6 +151,22 @@ export async function POST(request: Request) {
     }
   }
 
+  const PLACEHOLDER_COMMENT = LOADING_COMMENT.replace(
+    '$USER',
+    event.repository.owner.login
+  )
+
+  const { commentId, error: commentError } = await commentOnPr(
+    PLACEHOLDER_COMMENT,
+    event
+  )
+
+  if (commentError) {
+    return new Response(commentError.message, {
+      status: 500,
+    })
+  }
+
   const repository = data
     .filter((repository) => repository.title === event.repository.name)
     .at(0)
@@ -182,7 +198,7 @@ export async function POST(request: Request) {
       throw Error('Fail on get Gpt analysis')
     }
 
-    const { error } = await commentOnPr(content, event)
+    const { error } = await updateCommentOnPr(commentId, content, event)
 
     if (error) {
       throw Error(error.message)
