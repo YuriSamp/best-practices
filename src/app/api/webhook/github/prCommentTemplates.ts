@@ -16,11 +16,11 @@ Happy coding! ✨
 *The Best-pratices Team*`
 
 export const LOADING_COMMENT = `
-🤖 **Analyzing Your Code...**
+**Analyzing Your Code...**
 
 Hey there, $USER! 🌟
 
-We're thrilled about your commitment to collaboration and code quality! Our AI is hard at work analyzing your pull request to provide you with valuable insights and suggestions.
+We're thrilled about your commitment to collaboration and code quality! Our AI is analyzing your pull request to provide you with valuable insights and suggestions.
 
 While you wait, here's a little robot to keep you company: 🤖
 
