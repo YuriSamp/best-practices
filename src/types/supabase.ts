@@ -93,7 +93,7 @@ export interface Database {
           stripe_customer_id: string | null
           stripe_price_id: string | null
           stripe_subscription_id: string | null
-          tokens: number | null
+          tokens: number
           updated_at: string | null
           user_uid: string
           userName: string
@@ -107,7 +107,7 @@ export interface Database {
           stripe_customer_id?: string | null
           stripe_price_id?: string | null
           stripe_subscription_id?: string | null
-          tokens?: number | null
+          tokens: number
           updated_at?: string | null
           user_uid: string
           userName: string
@@ -121,7 +121,7 @@ export interface Database {
           stripe_customer_id?: string | null
           stripe_price_id?: string | null
           stripe_subscription_id?: string | null
-          tokens?: number | null
+          tokens?: number
           updated_at?: string | null
           user_uid?: string
           userName?: string

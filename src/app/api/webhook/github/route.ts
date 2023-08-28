@@ -123,7 +123,17 @@ export async function POST(request: Request) {
       .select()
       .eq('user_id', user?.user_uid)
 
-    if (logs && logs?.length >= 5) {
+    const usedTokens = logs
+      ?.map((item) => item.token_count)
+      .reduce((a, b) => a + b)
+
+    if (!usedTokens) {
+      throw Error('Failed to get usedTokens')
+    }
+
+    const exceedMaxTokenUsage = user.tokens < usedTokens
+
+    if (exceedMaxTokenUsage) {
       const LIMIT_EXCEEDED = BASE_LIMIT_EXCEEDED.replace(
         '$USER',
         event.repository.owner.login
