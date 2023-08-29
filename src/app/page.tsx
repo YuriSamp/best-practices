@@ -1,9 +1,6 @@
 'use client'
 
 import Link from 'next/link';
-import PrExample from '../../public/pr.png'
-import Dashboard from '../../public/dashboard.png'
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -13,7 +10,6 @@ import {
 } from "@/components/ui/accordion"
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import install from '../../public/install.png'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 
@@ -61,26 +57,32 @@ export default function Home() {
         </Link>
       </section>
       <section className='py-10'>
-        <ol className='flex flex-col gap-20 pt-5 px-3 items-center  text-center xl:text-left'>
+        <ol className='flex flex-col gap-32 pt-5 px-3 items-center  text-center xl:text-left'>
           <li className='my-5 flex flex-col-reverse xl:flex-row justify-between gap-10 '>
-            <Image src={install} alt='Pull Request example' width={900} className='rounded-xl border xl:w-[500px] 2xl:w-[640px]' />
+            <video autoPlay={true} loop={true} muted={true} className='rounded-xl border xl:w-[600px] 2xl:w-[800px]' >
+              <source src="/install-app.mp4" type="video/mp4" />
+            </video>
             <div>
-              <p className='text-2xl font-bold'>Simplicity in Installing the GitHub App</p>
-              <p className='mt-5 text-xl tracking-wide'>Install our GitHub App with just a few clicks. Authorize the permissions and the App will automatically detect the repositories.</p>
+              <p className='text-3xl font-bold'>Simplicity in Installing the GitHub App</p>
+              <p className='mt-5 text-2xl tracking-wide'>Install our GitHub App with just a few clicks. Authorize the permissions and the App will automatically detect the repositories.</p>
             </div>
           </li>
           <li className='my-5 flex justify-between gap-10 flex-col xl:flex-row' >
             <div>
-              <p className='text-2xl font-bold'>Simple to keep track your code</p>
-              <p className='mt-5 text-lg tracking-wide'>Easily customize code review rules in our dashboard. Activate, deactivate, or edit guidelines with a user-friendly interface. Our documentation will be available for guidance.</p>
+              <p className='text-3xl font-bold'>Simple to keep track your code</p>
+              <p className='mt-5 text-2xl tracking-wide'>Easily customize code review rules in our dashboard. Activate, deactivate, or edit guidelines with a user-friendly interface. Our documentation will be available for guidance.</p>
             </div>
-            <Image src={Dashboard} alt='Pull Request example' width={900} className='rounded-xl border xl:w-[500px] 2xl:w-[640px]' />
+            <video autoPlay={true} loop={true} muted={true} className='rounded-xl border xl:w-[600px] 2xl:w-[800px]' >
+              <source src="/save-preference.mp4" type="video/mp4" />
+            </video>
           </li>
           <li className='my-5 flex justify-between gap-10 flex-col-reverse xl:flex-row' >
-            <Image src={PrExample} alt='Pull Request example' width={900} className='rounded-xl border xl:w-[500px] 2xl:w-[640px]' />
+            <video autoPlay={true} loop={true} muted={true} className='rounded-xl border xl:w-[600px] 2xl:w-[800px]' >
+              <source src="/pr-comment.mp4" type="video/mp4" />
+            </video>
             <div>
-              <p className='text-2xl font-bold'>Enhancement in Pull Requests:</p>
-              <p className='mt-5 text-lg tracking-wide'>After installation and setup, your pull requests will be automatically evaluated. Receive detailed feedback aligned with the chosen best practices. Effectively improve the quality of your pull requests.</p>
+              <p className='text-3xl font-bold'>Enhancement in Pull Requests:</p>
+              <p className='mt-5 text-2xl tracking-wide'>After installation and setup, your pull requests will be automatically evaluated. Receive detailed feedback aligned with the chosen best practices. Effectively improve the quality of your pull requests.</p>
             </div>
           </li>
         </ol>
