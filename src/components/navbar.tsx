@@ -27,7 +27,7 @@ const Navbar = () => {
 
 
   return (
-    <header className='flex justify-between items-center mt-5 pb-5 mb-3 w-full border-b border-neutral-700 px-3'>
+    <header className='flex justify-between items-center mt-5 pb-5 mb-3 w-full  px-3'>
       <Link href={'/'} className='flex items-center gap-3 cursor-pointer'>
         <AiOutlineTool className='w-6 h-6' />
         <h3 className='sm:text-xl font-bold'>Best-pratices</h3>
