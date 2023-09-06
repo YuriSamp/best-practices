@@ -116,7 +116,7 @@ const Sidebar = ({ projects, repoSelect, setRepoSelected }: SidebarProps) => {
           </div>
         </div>
         :
-        <div className={`${isSidebarOpen && 'border border-[#292524]'} rounded-xl px-4 py-5 cursor-pointer absolute`} onClick={() => setIsSidebarOpen(prev => !prev)}>
+        <div className={`${isSidebarOpen && 'border border-[#292524]'} rounded-xl px-4 py-5 cursor-pointer absolute `} onClick={() => setIsSidebarOpen(prev => !prev)}>
           <PanelLeft />
         </div>
       }

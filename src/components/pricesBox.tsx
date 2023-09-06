@@ -32,7 +32,7 @@ const PricesBox = ({ prices }: { prices: StripePrice[] }) => {
         {prices.map((price, i) => (
           <div className='flex flex-col' key={price.id}>
             {isOdd(i) ? <p className='text-2xl text-center'>Most Popular</p> : <div className='h-8' />}
-            <div className={`${isOdd(i) ? 'bg-orange-300 text-black' : 'bg-[#121212]'} rounded-lg  text-white w-80  px-5 py-8 mt-2 shadow-xl border relative`} >
+            <div className={`${isOdd(i) ? 'bg-orange-300 text-black' : 'bg-[#121212]'} rounded-lg  w-80 px-5 py-8 mt-2 shadow-xl border relative`} >
               <div className='flex flex-col items-center gap-1'>
                 <div className='flex items-center gap-3'>
                   <h3 className='text-3xl font-bold'>{price.nickname}</h3>
