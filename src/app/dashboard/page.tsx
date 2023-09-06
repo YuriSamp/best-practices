@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useSessionStore from '@/store/useSessionStore'
 import axios from 'axios';
+import DashboardNavbar from '@/components/dashboardNavbar';
 
 type Repository = {
   rules: null | string[]
@@ -54,6 +55,7 @@ const Dashboard = () => {
         setRepoSelected={setRepoSelected}
       />
       <section className='w-full min-h-screen'>
+        <DashboardNavbar />
         <ToastContainer
           position='top-center'
           theme='dark'
@@ -63,7 +65,7 @@ const Dashboard = () => {
             repository={repoSelect}
           />
           :
-          <div className='w-full h-full flex items-center justify-center'>
+          <div className='w-full h-5/6 flex items-center justify-center'>
             <span className='text-4xl'>Select a project to add some rules</span>
           </div>
         }
