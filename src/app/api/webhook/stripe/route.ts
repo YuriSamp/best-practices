@@ -1,25 +1,9 @@
+import { handleTier } from '@/lib/Tier'
 import { stripe } from '@/lib/stripe'
 import { getSupabaseServerSide } from '@/lib/supabase'
 import Stripe from 'stripe'
 
 const webhookSecret = process.env.STRIPE_PAYMENT_WEBHOOK_SECRET
-
-const handleTier = (price: number) => {
-  let tokens = 0
-
-  switch (price) {
-    case 500:
-      tokens = 10000
-      break
-    case 1500:
-      tokens = 30000
-      break
-    case 3000:
-      tokens = 70000
-      break
-  }
-  return tokens
-}
 
 export async function POST(req: Request) {
   const body = await req.text()
