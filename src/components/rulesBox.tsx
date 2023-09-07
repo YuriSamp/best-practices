@@ -57,7 +57,7 @@ const RulesBox = ({ repository }: Props) => {
   return (
     <div className='flex justify-center mx-5 '>
       <div className='min-w-[280px] sm:w-[400px] md:w-[600px] xl:w-[900px] mt-12 '>
-        <h2 className='text-2xl sm:text-3xl mb-10 text-center'>Search a practice</h2>
+        <h2 className='text-2xl sm:text-3xl mb-10 text-center'>Optimize Your Code Quality</h2>
         <ul className='max-h-[63vh] self-start overflow-scroll overflow-x-hidden mt-10'>
           {principles.map(principle => (
             <div className='pb-5 mb-5 border-b last:border-0 border-neutral-400 w-full' key={principle.id}>
