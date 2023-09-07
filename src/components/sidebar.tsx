@@ -1,7 +1,6 @@
-import { Folder, Plus, PanelLeft, Github } from 'lucide-react'
+import { Folder, Plus, PanelLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { AiOutlineTool } from 'react-icons/ai'
 
 type Repository = {
   rules: null | string[]

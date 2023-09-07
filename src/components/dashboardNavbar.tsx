@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut } from 'lucide-react';
+import { LogOut, DollarSign } from 'lucide-react';
 import { getSupabaseClietSide } from '@/lib/supabase';
 import { useRouter } from 'next/navigation'
 
@@ -53,6 +53,8 @@ const DashboardNavbar = () => {
     router.push('/auth')
   }
 
+  const upgradePlan = () => router.push('/prices')
+
 
   return (
     <div className='py-4 flex justify-end px-12 gap-6 items-center border-b bg-[#121212] z-10'>
@@ -68,6 +70,10 @@ const DashboardNavbar = () => {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='mr-4'>
+          <DropdownMenuItem className='flex gap-1 cursor-pointer' onClick={upgradePlan}>
+            <DollarSign className='w-5 h-5' />
+            Upgrade plan
+          </DropdownMenuItem>
           <DropdownMenuItem className='flex gap-1 cursor-pointer' onClick={signOut}>
             <LogOut className='w-5 h-5' />
             Log Out
